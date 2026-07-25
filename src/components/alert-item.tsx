@@ -145,6 +145,14 @@ export function AlertItem({
         <p className="min-w-0 flex-1 truncate text-sm text-neutral-900">
           {titleLabel ?? alert.title.replace(/https?:\/\//g, "")}
         </p>
+        {alert.suppressed && (
+          <span
+            className="hidden shrink-0 items-center rounded-full bg-neutral-100 px-2 py-0.5 text-[0.625rem] font-semibold tracking-wide text-neutral-500 uppercase ring-1 ring-neutral-950/5 ring-inset sm:inline-flex"
+            title={alert.suppressionReason?.trim() || "Held by the AI relevance filter"}
+          >
+            Held
+          </span>
+        )}
         {(mag.added > 0 || mag.removed > 0) && (
           <span className="hidden shrink-0 items-center gap-1.5 tabular-nums sm:inline-flex">
             {mag.added > 0 && (
@@ -173,6 +181,15 @@ export function AlertItem({
       </div>
       {expanded && (
         <div className={`border-t border-neutral-950/[0.05] pb-4 pt-3 ${rowPx}`}>
+          {alert.suppressed && (
+            <div className="mb-3 rounded-xl bg-neutral-50 px-3.5 py-3 text-xs leading-relaxed text-neutral-600 ring-1 ring-neutral-950/5">
+              <span className="font-semibold text-neutral-700">Held by the AI relevance filter.</span>{" "}
+              {alert.suppressionReason?.trim()
+                ? `${alert.suppressionReason.trim().replace(/[.!?]+$/, "")}. `
+                : "Judged not to match this monitor's note. "}
+              No notification was sent.
+            </div>
+          )}
           <DetailsView details={details} diffAnchorAlertId={alert.id} attribution={attribution} />
         </div>
       )}

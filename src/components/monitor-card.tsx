@@ -108,6 +108,7 @@ export function MonitorCard({
   const [checkIntervalHours, setCheckIntervalHours] = useState(target.checkIntervalHours ?? 1);
   const [linkScope, setLinkScope] = useState<LinkScope>(() => coerceLinkScope(target.linkScope));
   const [aiSummaryEnabled, setAiSummaryEnabled] = useState(target.aiChangeSummaryEnabled ?? false);
+  const [aiTriageEnabled, setAiTriageEnabled] = useState(target.aiTriageEnabled ?? false);
   const [busy, setBusy] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(highlightEdit ?? false);
   const [contentOpen, setContentOpen] = useState(false);
@@ -126,6 +127,7 @@ export function MonitorCard({
     setCheckIntervalHours(target.checkIntervalHours ?? 1);
     setLinkScope(coerceLinkScope(target.linkScope));
     setAiSummaryEnabled(target.aiChangeSummaryEnabled ?? false);
+    setAiTriageEnabled(target.aiTriageEnabled ?? false);
   }, [target]);
 
   useEffect(() => {
@@ -175,6 +177,11 @@ export function MonitorCard({
   async function setAiSummaryPreference(next: boolean) {
     if (!aiSummaryConfigured && next) return;
     if (await patch({ aiChangeSummaryEnabled: next })) setAiSummaryEnabled(next);
+  }
+
+  async function setAiTriagePreference(next: boolean) {
+    if (!aiSummaryConfigured && next) return;
+    if (await patch({ aiTriageEnabled: next })) setAiTriageEnabled(next);
   }
 
   return (
@@ -426,6 +433,42 @@ export function MonitorCard({
               </Link>
             )}
           </div>
+
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <label className="inline-flex cursor-pointer items-center gap-2 text-xs text-neutral-700">
+              <span
+                className={`group relative inline-flex w-9 shrink-0 rounded-full p-0.5 ring-1 ring-inset transition-colors ${
+                  aiTriageEnabled ? "bg-brand-500 ring-brand-500" : "bg-neutral-200 ring-neutral-950/5"
+                } ${busy || (!aiSummaryConfigured && !aiTriageEnabled) ? "opacity-60" : ""}`}
+              >
+                <span
+                  className={`aspect-square w-1/2 rounded-full bg-white shadow-xs ring-1 ring-neutral-950/5 transition-transform ${
+                    aiTriageEnabled ? "translate-x-full" : ""
+                  }`}
+                />
+                <input
+                  type="checkbox"
+                  className="absolute inset-0 size-full appearance-none focus:outline-none"
+                  checked={aiTriageEnabled}
+                  disabled={busy || (!aiSummaryConfigured && !aiTriageEnabled)}
+                  onChange={() => void setAiTriagePreference(!aiTriageEnabled)}
+                  aria-label="AI relevance filter"
+                />
+              </span>
+              <span className="font-medium text-neutral-800">AI relevance filter</span>
+            </label>
+            {!aiSummaryConfigured && (
+              <Link href="/dashboard/settings" className="text-xs text-brand-700 hover:underline">
+                Set up
+              </Link>
+            )}
+          </div>
+          {aiTriageEnabled && (
+            <p className="mt-1.5 text-xs leading-relaxed text-neutral-500">
+              Changes that don&apos;t match this monitor&apos;s note are held in the dashboard instead of
+              notifying. Nothing is deleted.
+            </p>
+          )}
 
           <div className="mt-4 border-t border-neutral-950/5 pt-3">
             <button
