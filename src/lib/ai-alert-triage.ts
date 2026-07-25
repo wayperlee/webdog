@@ -124,17 +124,14 @@ export async function triageChange(params: {
   ].join("\n");
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), LLM_TIMEOUT_MS);
     const { text } = await generateText({
       model: createLanguageModel(config),
       system: TRIAGE_SYSTEM_PROMPT,
       prompt: userMessage,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       temperature: 0,
-      abortSignal: controller.signal,
+      abortSignal: AbortSignal.timeout(LLM_TIMEOUT_MS),
     });
-    clearTimeout(timeout);
     return parseTriageDecision(text);
   } catch (err) {
     // Fail open: a triage failure must never hide a real change.

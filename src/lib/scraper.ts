@@ -201,8 +201,14 @@ async function handleContentTarget(
   if (!target.pageUrl) return;
   const page = target.pageUrl;
   const curr = await ensureMarkdown(page, cache);
-  await ensurePageScreenshot(page, cache);
   const prev = await latestSnapshot(website.id, "MARKDOWN", page);
+  // The screenshot only backs the "current version" thumbnail, not change
+  // detection (that's the markdown hash). Capture it on the first snapshot and
+  // whenever the content actually changes; an unchanged page keeps its last
+  // screenshot, so we don't spend a context.dev capture on every quiet check.
+  if (!prev || prev.hash !== curr.hash) {
+    await ensurePageScreenshot(page, cache);
+  }
   if (prev && prev.hash !== curr.hash) {
     const { preview, totalAdded, totalRemoved } = diffPreview(prev.payload, curr.md);
     alerts.push({
@@ -234,7 +240,6 @@ async function handleProductPriceTarget(
   if (!target.pageUrl) return;
   const page = target.pageUrl;
   const result = await extractProduct(page, { apiKey: cache.contextApiKey });
-  await ensurePageScreenshot(page, cache);
   const snap: ProductSnapshotData = {
     is_product_page: result.is_product_page,
     platform: result.platform ?? null,
@@ -247,11 +252,25 @@ async function handleProductPriceTarget(
   cache.product.set(page, value);
 
   const prev = await latestSnapshot(website.id, "PRODUCT", page);
-  if (!prev) return;
-  if (!snap.is_product_page) return;
-  const prevData = JSON.parse(prev.payload) as ProductSnapshotData;
-  if (!prevData.is_product_page) return;
-  if (priceChangeKey(prevData) === priceChangeKey(snap)) return;
+  const prevData = prev ? (JSON.parse(prev.payload) as ProductSnapshotData) : null;
+  const priceChanged =
+    prevData !== null &&
+    snap.is_product_page &&
+    prevData.is_product_page &&
+    priceChangeKey(prevData) !== priceChangeKey(snap);
+
+  // The screenshot only backs the "current version" thumbnail. Refresh it on the
+  // first snapshot and whenever the extracted product payload changes at all —
+  // keyed off the snapshot hash, mirroring the content handler — so the thumbnail
+  // can't go stale while the payload moves (name/platform/availability) even when
+  // the price is unchanged. An identical check keeps the last screenshot, so a
+  // quiet page doesn't spend a context.dev capture. Alert emission stays gated on
+  // an actual price change below.
+  if (!prev || prev.hash !== value.hash) {
+    await ensurePageScreenshot(page, cache);
+  }
+
+  if (!priceChanged || !prevData) return;
 
   const name = snap.productName || page;
   const fmt = (p: number | null, c: string | null) =>

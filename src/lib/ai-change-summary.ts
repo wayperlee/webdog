@@ -183,17 +183,14 @@ export async function summarizeChange(params: {
   ].join("\n");
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), LLM_TIMEOUT_MS);
     const { text } = await generateText({
       model: createLanguageModel(config),
       system: SYSTEM_PROMPT,
       prompt: userMessage,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       temperature: 0.2,
-      abortSignal: controller.signal,
+      abortSignal: AbortSignal.timeout(LLM_TIMEOUT_MS),
     });
-    clearTimeout(timeout);
     const summary = text.trim();
     return summary || null;
   } catch (err) {
