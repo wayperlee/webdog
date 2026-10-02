@@ -190,6 +190,8 @@ export const target = pgTable(
     archivedAt: timestamp("archived_at", { withTimezone: true }),
     scopeVersion: integer("scope_version").notNull().default(1),
     filterVersion: integer("filter_version").notNull().default(1),
+    includePaths: jsonb("include_paths").$type<string[]>().notNull().default([]),
+    excludePaths: jsonb("exclude_paths").$type<string[]>().notNull().default([]),
     baselineRunId: text("baseline_run_id").references((): AnyPgColumn => crawlRun.id, { onDelete: "restrict" }),
     sitemapRoots: jsonb("sitemap_roots").$type<string[]>(),
     allowedPageHosts: jsonb("allowed_page_hosts").$type<string[]>(),

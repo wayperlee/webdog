@@ -1,5 +1,6 @@
 import { normalizeHttpUrl, normalizedPageHosts } from "./sitemap/urls";
 import { adoptComplete, approveCandidate } from "./url-inventory";
+import { normalizePathRules, type MonitorPatch } from "./monitor-filters";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
 import { NORMALIZATION_POLICY, type CrawlResult, type CrawlState } from "./sitemap/types";
@@ -203,10 +204,40 @@ export class CrawlQueue {
       if (!final.rowCount) throw new QueueError("LEASE_LOST");
     });
   }
+  async configureMonitor(targetId: string, ownerId: string, input: MonitorPatch) {
+    const includes = input.includePaths === undefined ? null : normalizePathRules(input.includePaths);
+    const excludes = input.excludePaths === undefined ? null : normalizePathRules(input.excludePaths);
+    if (input.checkIntervalHours !== undefined && ![1, 6, 12, 24].includes(input.checkIntervalHours)) throw new QueueError("INVALID_INTERVAL");
+    return this.transaction(async (client) => {
+      const target = (await client.query<TargetRow>(`${TARGET} WHERE t.id=$1 AND w."userId"=$2 FOR UPDATE OF t`, [targetId, ownerId])).rows[0];
+      if (!target) throw new QueueError("TARGET_NOT_FOUND");
+      if (target.kind !== "SITEMAP_LINKS") throw new QueueError("TARGET_UNSUPPORTED");
+      if (target.archivedAt && input.archived !== false) throw new QueueError("TARGET_ARCHIVED");
+      const { rows: [updated] } = await client.query(`UPDATE target SET
+        enabled=COALESCE($2::boolean,enabled),
+        "nextCheckDueAt"=CASE WHEN $3::double precision IS NOT NULL AND $3<>"checkIntervalHours" THEN clock_timestamp()+$3*interval '1 hour' ELSE "nextCheckDueAt" END,
+        "checkIntervalHours"=COALESCE($3::double precision,"checkIntervalHours"),
+        archived_at=CASE WHEN $4::boolean IS NULL THEN archived_at WHEN $4 THEN clock_timestamp() ELSE NULL END,
+        filter_version=filter_version+CASE WHEN ($5::jsonb IS NOT NULL AND $5::jsonb<>include_paths) OR ($6::jsonb IS NOT NULL AND $6::jsonb<>exclude_paths) THEN 1 ELSE 0 END,
+        include_paths=COALESCE($5::jsonb,include_paths),exclude_paths=COALESCE($6::jsonb,exclude_paths)
+        WHERE id=$1 RETURNING scope_version,filter_version,enabled,archived_at`,
+        [targetId, input.enabled ?? null, input.checkIntervalHours ?? null, input.archived ?? null,
+          includes === null ? null : JSON.stringify(includes), excludes === null ? null : JSON.stringify(excludes)]);
+      if (input.archived === true) {
+        // Revoke running attempts too: restoring the monitor cannot revive an attempt started before archive.
+        const active = await client.query<RunRow>("SELECT * FROM crawl_run WHERE target_id=$1 AND execution_status IN ('queued','running') FOR UPDATE", [targetId]);
+        for (const run of active.rows) if (run.execution_status === "running") await this.closeAttempt(client, run, "discarded", null);
+        await client.query(`UPDATE crawl_run SET execution_status='cancelled',adoption_status='stale',finished_at=clock_timestamp(),
+          lease_token=NULL,lease_expires_at=NULL WHERE target_id=$1 AND execution_status IN ('queued','running')`, [targetId]);
+      }
+      return updated;
+    });
+  }
   async configureScope(targetId: string, ownerId: string, input: { roots: string[] | null; allowedPageHosts: string[] | null }) {
     return this.transaction(async (client) => {
       const target = (await client.query<TargetRow>(`${TARGET} WHERE t.id=$1 AND w."userId"=$2 FOR UPDATE OF t`, [targetId, ownerId])).rows[0];
       if (!target) throw new QueueError("TARGET_NOT_FOUND");
+      if (target.kind !== "SITEMAP_LINKS") throw new QueueError("TARGET_UNSUPPORTED");
       if (target.archivedAt) throw new QueueError("TARGET_ARCHIVED");
       if (input.roots && (input.roots.length === 0 || input.roots.length > 500)) throw new QueueError("INVALID_ROOTS");
       if (input.allowedPageHosts && (input.allowedPageHosts.length === 0 || input.allowedPageHosts.length > 100)) throw new QueueError("INVALID_HOSTS");

@@ -8,7 +8,7 @@
 - [x] PR 2：原生安全 fetch、发现、XML/index/gzip、304 缓存、完整来源图；实现与本地验证见 [pr2-native-sitemap.md](pr2-native-sitemap.md)。
 - [x] PR 3：持久化任务、execution_status 唯一约束、availableAt、leaseToken、重试及恢复；本地验收见 [pr3-durable-queue.md](pr3-durable-queue.md)。
 - [x] PR 4：scope inventory、逐 URL 缺失证据、Candidate、原子采纳/CAS、引用驱动 GC；本地验收见 [pr4-inventory-candidates.md](pr4-inventory-candidates.md)。
-- [ ] PR 5：网站列表、详情 Tabs、筛选、错误恢复、暂停与归档/恢复。
+- [x] PR 5：网站列表、详情 Tabs、筛选、错误恢复、暂停与归档/恢复；本地验收见 [pr5-dashboard-ui.md](pr5-dashboard-ui.md)。
 - [ ] PR 6：部署、备份恢复、容量与真实站点兼容性验收。
 
 完成勾选指代码与本地验证，不代表对应 GitHub PR 已合并或部署。

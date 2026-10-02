@@ -1,4 +1,4 @@
-> **Sitemap Radar PR 4 checkpoint** — Forked from `context-dot-dev/webdog` at
+> **Sitemap Radar PR 5 checkpoint** — Forked from `context-dot-dev/webdog` at
 > `426158f543fbaf591f7248f1be62ebfa8b4d695c`. Authentication and website/sitemap-target
 > configuration work without provider keys. Legacy providers, sharing, invitations,
 > notifications, destructive deletes and synchronous checks are disabled. The worker
@@ -7,7 +7,9 @@
 > Complete scans now atomically update scoped URL inventory, full events and removal
 > Candidates. Suspicious results are quarantined; owner approval supplies first evidence.
 > Worker confirmation and reference-aware GC preserve the frozen adoption contract.
-> Dashboard inventory/history/filter UI arrives in PR 5.
+> Dashboard now includes current URL/24h summaries, URL inventory, changes, runs,
+> Candidates, scope history, path filters, pause/resume and archive/restore.
+> See [dashboard behavior and local acceptance](docs/pr5-dashboard-ui.md).
 > On fake-IP networks, set `SITEMAP_DNS_RESOLVER=cloudflare-doh` in the Worker
 > environment and restart it; public-IP, peer and TLS checks remain enabled.
 > See [DNS configuration and live acceptance](docs/network-doh.md).
