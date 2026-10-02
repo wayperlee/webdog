@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-02T09:57:37.708Z",
+  "environment": "Isolated local schema, fresh temporary database",
+  "tableCount": 23,
+  "dataHash": "972eb54fd328b24512c834c3fc74d97c8f2657073c7026ecf2ce413fd6b95256",
+  "schemaHash": "b9778dd1c19dab8a51af4660fa04b49ab022b7f60c2f3b5ea9016e27d21e5f45",
+  "rowsAndDefinitionsMatch": true,
+  "includesGroupsColumnCompositeForeignKeyRlsAndGrants": true,
+  "restoredGroupQuery": true,
+  "restoredApplicationRoleReadWrite": true,
+  "privateBackupMode": "0600",
+  "cleanup": "Completed after validation"
+}

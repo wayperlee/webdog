@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { AssignGroups, type GroupChoice } from "./group-controls";
 import { AddWebsiteDialog } from "./add-website-dialog";
 import { Badge, time, number } from "./monitor-format";
 import type { MonitorSummary } from "@/lib/monitor-summary";
@@ -9,9 +10,19 @@ type Website = {
   id: string;
   name: string;
   domain: string;
+  ownerId: string;
+  competitorGroupId: string | null;
   monitor: MonitorSummary | null;
 };
-export function WebsiteListView({ websites }: { websites: Website[] }) {
+export function WebsiteListView({
+  websites,
+  groups,
+}: {
+  websites: Website[];
+  groups: GroupChoice[];
+}) {
+  const [groupFilter, setGroupFilter] = useState("all"),
+    [selected, setSelected] = useState<string[]>([]);
   const router = useRouter();
   const [search, setSearch] = useState(""),
     [showArchived, setShowArchived] = useState(false);
@@ -22,6 +33,10 @@ export function WebsiteListView({ websites }: { websites: Website[] }) {
   const visible = websites.filter(
     (w) =>
       (showArchived || !w.monitor?.archivedAt) &&
+      (groupFilter === "all" ||
+        (groupFilter === "ungrouped"
+          ? !w.competitorGroupId
+          : w.competitorGroupId === groupFilter)) &&
       `${w.name} ${w.domain}`.toLowerCase().includes(search.toLowerCase()),
   );
   return (
@@ -41,13 +56,36 @@ export function WebsiteListView({ websites }: { websites: Website[] }) {
           className="input max-w-xs"
           placeholder="Search websites"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setSelected([]);
+          }}
         />
+        <select
+          className="input max-w-xs"
+          aria-label="Filter by competitor group"
+          value={groupFilter}
+          onChange={(e) => {
+            setGroupFilter(e.target.value);
+            setSelected([]);
+          }}
+        >
+          <option value="all">All groups</option>
+          <option value="ungrouped">Ungrouped</option>
+          {groups.map((g) => (
+            <option value={g.id} key={g.id}>
+              {g.name}
+            </option>
+          ))}
+        </select>
         <label className="flex gap-2 text-sm">
           <input
             type="checkbox"
             checked={showArchived}
-            onChange={(e) => setShowArchived(e.target.checked)}
+            onChange={(e) => {
+              setShowArchived(e.target.checked);
+              setSelected([]);
+            }}
           />
           Show archived
         </label>
@@ -55,12 +93,28 @@ export function WebsiteListView({ websites }: { websites: Website[] }) {
           {visible.length} websites
         </span>
       </div>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <span className="text-sm text-neutral-500">
+          {selected.length} selected · max 100
+        </span>
+        <AssignGroups
+          websites={websites.filter((w) => selected.includes(w.id))}
+          onSaved={() => setSelected([])}
+        />
+        {selected.length > 0 && (
+          <button className="btn-secondary" onClick={() => setSelected([])}>
+            Clear selection
+          </button>
+        )}
+      </div>
       <div className="card mt-5 overflow-x-auto">
         <table className="w-full min-w-[860px] text-left text-sm">
           <thead className="border-b border-neutral-100 text-xs text-neutral-500">
             <tr>
               {[
+                "Select",
                 "Website",
+                "Group",
                 "Current URLs",
                 "Changes · 24h",
                 "Status",
@@ -95,6 +149,23 @@ export function WebsiteListView({ websites }: { websites: Website[] }) {
                   className="border-b border-neutral-100 last:border-0"
                 >
                   <td className="px-5 py-5">
+                    <input
+                      type="checkbox"
+                      aria-label={`Select ${w.domain}`}
+                      checked={selected.includes(w.id)}
+                      disabled={
+                        !selected.includes(w.id) && selected.length >= 100
+                      }
+                      onChange={(e) =>
+                        setSelected((ids) =>
+                          e.target.checked
+                            ? [...ids, w.id]
+                            : ids.filter((id) => id !== w.id),
+                        )
+                      }
+                    />
+                  </td>
+                  <td className="px-5 py-5">
                     <Link
                       className="font-semibold hover:text-brand-600"
                       href={`/dashboard/websites/${w.id}`}
@@ -102,6 +173,16 @@ export function WebsiteListView({ websites }: { websites: Website[] }) {
                       {w.name}
                     </Link>
                     <p className="mt-1 text-xs text-neutral-500">{w.domain}</p>
+                  </td>
+                  <td className="px-5 py-5">
+                    {w.competitorGroupId ? (
+                      <Link href={`/dashboard/groups/${w.competitorGroupId}`}>
+                        {groups.find((g) => g.id === w.competitorGroupId)
+                          ?.name ?? "Group"}
+                      </Link>
+                    ) : (
+                      "Ungrouped"
+                    )}
                   </td>
                   <td className="px-5 py-5 tabular-nums">
                     {t?.baselineRunId ? number(t.currentCount) : "—"}

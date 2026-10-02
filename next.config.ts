@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   outputFileTracingRoot: process.cwd(),
   /** External on the server avoids missing `vendor-chunks/better-auth.js` and related webpack chunk bugs. */
   serverExternalPackages: ["pg", "better-auth"],
