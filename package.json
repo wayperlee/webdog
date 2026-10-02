@@ -22,7 +22,9 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:reset": "tsx scripts/reset-db.ts && drizzle-kit push",
-    "lint": "eslint src scripts drizzle.config.ts next.config.ts tailwind.config.ts eslint.config.mjs"
+    "lint": "eslint src scripts drizzle.config.ts next.config.ts tailwind.config.ts eslint.config.mjs",
+    "sitemap:scan": "tsx scripts/sitemap-scan.ts",
+    "sitemap:compatibility": "tsx scripts/sitemap-compatibility.ts"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^3.0.121",
@@ -33,11 +35,13 @@
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.45.2",
+    "ipaddr.js": "2.5.0",
     "next": "^15.5.18",
     "node-cron": "^4.2.1",
     "pg": "^8.20.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "saxes": "6.0.0",
     "tsx": "^4.22.3",
     "zod": "^3.24.1"
   },

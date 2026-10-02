@@ -5,13 +5,13 @@
 ## 交付阶段
 
 - [x] PR 1：本地上游复现、主流程解耦、旧入口收口和基线证据。
-- [ ] PR 2：原生安全 fetch、发现、XML/index/gzip、304 缓存、完整来源图。
+- [x] PR 2：原生安全 fetch、发现、XML/index/gzip、304 缓存、完整来源图；实现与本地验证见 [pr2-native-sitemap.md](pr2-native-sitemap.md)。
 - [ ] PR 3：持久化任务、execution_status 唯一约束、availableAt、leaseToken、重试及恢复。
 - [ ] PR 4：scope inventory、逐 URL 缺失证据、Candidate、原子采纳/CAS、引用驱动 GC。
 - [ ] PR 5：网站列表、详情 Tabs、筛选、错误恢复、暂停与归档/恢复。
 - [ ] PR 6：部署、备份恢复、容量与真实站点兼容性验收。
 
-PR 1 的完成勾选指本地代码与验证，不代表 GitHub PR 已创建或已合并。
+完成勾选指代码与本地验证，不代表对应 GitHub PR 已合并或部署。
 
 ## Definition of Done
 

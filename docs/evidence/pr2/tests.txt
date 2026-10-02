@@ -1,0 +1,49 @@
+
+> webdog-ai@0.1.0 test
+> tsx --test src/**/*.test.ts
+
+✔ explicit suppress:true is honored and reason is kept (0.828333ms)
+✔ explicit suppress:false surfaces the alert (0.060292ms)
+✔ JSON wrapped in prose or code fences is still parsed (0.064083ms)
+✔ suppress:true with no reason gets a default reason (0.075417ms)
+✔ malformed JSON fails open (0.129833ms)
+✔ no JSON object at all fails open (0.052ms)
+✔ empty, null, and undefined all fail open (0.047209ms)
+✔ stringified 'true' is not a boolean and must not suppress (0.048167ms)
+✔ truthy non-boolean (1) must not suppress (0.058042ms)
+✔ missing suppress key fails open (0.101708ms)
+✔ a JSON array (not an object) fails open (0.051417ms)
+✔ an over-long reason is truncated (0.051458ms)
+✔ legacy destructive and outbound capabilities are closed (0.982709ms)
+✔ base auth and owned website/target routes remain available (0.549417ms)
+✔ Safe HTTP rejects mixed/private DNS answers before connecting, including every redirect hop (19.339208ms)
+✔ Connected private peer is rejected before sending any HTTP request (2.873916ms)
+✔ A different public peer is also rejected; redirected hostname DNS is checked again (2.098167ms)
+✔ DNS pin is reused for connection; conditional headers are sent only to the matching final URL (5.235667ms)
+✔ Retry-After is retained without inline retry; redirect loops and hop caps fail explicitly (2.2495ms)
+✔ Request deadline covers stalled DNS and stalled body; attempt deadline wins across requests (65.737916ms)
+✔ XML: namespaces, CDATA, entities, extension metadata and legitimate empty documents (9.76325ms)
+✔ XML: HTML, malformed, DTD, unknown entities, invalid UTF-8 and bad entries are distinct failures (136.011167ms)
+✔ Normalization preserves query order, slash and path case; private and ambiguous host scopes are rejected (5.882416ms)
+✔ Streaming gzip: magic, HTTP encoding, double gzip, split header, corruption and inflation caps (10.178417ms)
+✔ Interrupted gzip network stream remains retryable and differs from corrupt gzip (0.642ms)
+✔ Source DAG: nested indexes, shared child fetched once, full union and parent graph (1.497708ms)
+✔ 304 index still fetches children; valid leaf 304 restores its revision (1.141458ms)
+✔ Missing/corrupt revision never turns 304 into an empty success (0.412083ms)
+✔ 304 at a different final URL is rejected and corrupt cache is fetched unconditionally (0.516083ms)
+✔ Cached revisions survive arbitrarily old repeated 304 responses (2.290625ms)
+✔ Partial child failure preserves live sources; only complete graph can retire an unreferenced child (0.888041ms)
+✔ A source still referenced by another root is never retired; split movement preserves page union (0.747ms)
+✔ Discovery reads robots directives and fixes roots; subsequent root failure does not rediscover (0.451ms)
+✔ Discovery conventional roots: missing fallback okay; a failed candidate blocks a smaller baseline (0.6355ms)
+✔ Root and host changes require an explicit new baseline (0.3995ms)
+✔ Cycle, deep/shared paths, file/URL/byte caps all return null rather than a truncated set (1.669ms)
+✔ Attempt deadline and caller cancellation are bounded; frozen ceilings cannot be raised (10.789667ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 351.909792

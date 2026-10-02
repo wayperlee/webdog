@@ -1,0 +1,34 @@
+{
+  "resolver": "system DNS",
+  "reports": [
+    {
+      "site": "https://happy-horse.art",
+      "observedAt": "2026-10-02T04:20:01.939Z",
+      "elapsedMs": 11,
+      "first": {
+        "completeness": "unusable",
+        "observedUrlCount": 0,
+        "outOfScopeUrlCount": 0,
+        "roots": [],
+        "scopeFingerprint": "268e7e2a923b9c633af0a39c398ebe2c878c1724b633b320d9ad77b47283a952",
+        "sources": [],
+        "retiredSources": [],
+        "issues": [
+          {
+            "sourceUrl": "https://happy-horse.art/robots.txt",
+            "code": "UNSAFE_ADDRESS",
+            "message": "DNS returned a non-public or invalid address",
+            "retryable": false
+          }
+        ],
+        "compressedBytes": 0,
+        "inflatedBytes": 0,
+        "urlCount": null,
+        "urlSetHash": null,
+        "notModifiedCount": 0,
+        "retainedRevisionCount": 0
+      },
+      "second": null
+    }
+  ]
+}
