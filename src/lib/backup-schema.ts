@@ -7,6 +7,15 @@ export function canonicalBackupDefinition(
 ) {
   if (
     kind === "constraint" &&
+    object === "competitor_group" &&
+    name === "competitor_group_name_check" &&
+    definition ===
+      "CHECK ((((char_length(name) >= 1) AND (char_length(name) <= 80)) AND (name = btrim(name))))"
+  ) {
+    return "CHECK (((char_length(name) >= 1) AND (char_length(name) <= 80) AND (name = btrim(name))))";
+  }
+  if (
+    kind === "constraint" &&
     object === "crawl_run" &&
     name === "crawl_run_attempt_check" &&
     definition ===

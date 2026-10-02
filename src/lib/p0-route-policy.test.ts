@@ -5,7 +5,13 @@ import { p0RouteDecision } from "./p0-route-policy";
 test("legacy destructive and outbound capabilities are closed", () => {
   assert.equal(p0RouteDecision("/api/websites/w", "DELETE")?.status, 405);
   assert.equal(p0RouteDecision("/api/targets/t", "DELETE")?.status, 405);
-  for (const path of ["/api/websites/w/share", "/api/account/invites/redeem", "/api/user/notification-settings/test", "/api/user/ai-models", "/api/user/context-intro"]) {
+  for (const path of [
+    "/api/websites/w/share",
+    "/api/account/invites/redeem",
+    "/api/user/notification-settings/test",
+    "/api/user/ai-models",
+    "/api/user/context-intro",
+  ]) {
     assert.equal(p0RouteDecision(path, "POST")?.status, 404);
   }
   assert.equal(p0RouteDecision("/share/existing-token", "GET")?.status, 404);
@@ -14,8 +20,45 @@ test("legacy destructive and outbound capabilities are closed", () => {
 });
 
 test("base auth and owned website/target routes remain available", () => {
-  for (const [path, method] of [["/api/auth/sign-up/email", "POST"], ["/api/websites", "POST"], ["/api/websites/w", "GET"], ["/api/targets/t", "PATCH"], ["/api/targets/t/runs", "POST"], ["/api/targets/t/runs", "GET"], ["/api/cron/run", "POST"]]) {
+  for (const [path, method] of [
+    ["/api/auth/sign-up/email", "POST"],
+    ["/api/websites", "POST"],
+    ["/api/websites/w", "GET"],
+    ["/api/targets/t", "PATCH"],
+    ["/api/targets/t/runs", "POST"],
+    ["/api/targets/t/runs", "GET"],
+    ["/api/cron/run", "POST"],
+  ]) {
     assert.equal(p0RouteDecision(path, method), null);
   }
   assert.equal(p0RouteDecision("/api/future-capability", "POST")?.status, 404);
+});
+
+test("competitor groups expose only implemented owned capabilities", () => {
+  for (const [path, method] of [
+    ["/api/competitor-groups", "POST"],
+    ["/api/competitor-groups/overview", "GET"],
+    ["/api/competitor-groups/assign-websites", "POST"],
+    ["/api/competitor-groups/g", "DELETE"],
+    ["/api/competitor-groups/g", "PATCH"],
+    ["/api/competitor-groups/g/websites", "GET"],
+    ["/api/competitor-groups/g/events", "GET"],
+  ])
+    assert.equal(p0RouteDecision(path, method), null);
+  assert.equal(
+    p0RouteDecision("/api/competitor-groups/overview", "DELETE")?.status,
+    405,
+  );
+  assert.equal(
+    p0RouteDecision("/api/competitor-groups/assign-websites", "GET")?.status,
+    405,
+  );
+  assert.equal(
+    p0RouteDecision("/api/competitor-groups/g/websites", "POST")?.status,
+    405,
+  );
+  assert.equal(
+    p0RouteDecision("/api/competitor-groups/g/share", "POST")?.status,
+    404,
+  );
 });
