@@ -8,10 +8,8 @@ import { caughtUnknownMessage } from "@/lib/caught-unknown-message";
 
 export function SignInForm({
   className = "",
-  inviteToken = null,
 }: {
   className?: string;
-  inviteToken?: string | null;
 }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -32,11 +30,7 @@ export function SignInForm({
           );
           return;
         }
-        const next =
-          inviteToken && inviteToken.trim().length > 0
-            ? `/invite/${encodeURIComponent(inviteToken.trim())}`
-            : "/dashboard";
-        router.push(next);
+        router.push("/dashboard");
         router.refresh();
       } catch (caught) {
         setError(formatCredentialAuthUiError(caughtUnknownMessage(caught)));

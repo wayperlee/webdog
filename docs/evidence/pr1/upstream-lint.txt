@@ -1,0 +1,33 @@
+
+> webdog-ai@0.1.0 lint
+> eslint src scripts drizzle.config.ts next.config.ts tailwind.config.ts eslint.config.mjs
+
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/app/dashboard/layout.tsx
+  108:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/app/page.tsx
+   95:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+  280:22  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+  375:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/components/add-website-dialog.tsx
+  4:10  warning  'flushSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/components/animated-notif-list.tsx
+  71:13  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/components/monitor-card.tsx
+  524:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/components/public-monitor-card.tsx
+  106:16  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/components/system-services-settings.tsx
+  18:20  warning  '_key' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/src/lib/context-client.ts
+  7:10  warning  'normalizeDomain' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+  0 errors and 7 warnings potentially fixable with the `--fix` option.

@@ -1,0 +1,87 @@
+
+> webdog-ai@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.18
+   - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 2.4s
+   Linting and checking validity of types ...
+
+./src/components/animated-notif-list.tsx
+71:13  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/monitor-card.tsx
+524:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/public-monitor-card.tsx
+106:16  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/system-services-settings.tsx
+18:20  Warning: '_key' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/legacy/upstream-landing.tsx
+96:14  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+281:22  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+376:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/lib/context-client.ts
+8:10  Warning: 'normalizeDomain' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/25) ...
+   Generating static pages (6/25)
+   Generating static pages (12/25)
+   Generating static pages (18/25)
+ ✓ Generating static pages (25/25)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                      Size  First Load JS
+┌ ƒ /                                           166 B         106 kB
+├ ○ /_not-found                                 997 B         103 kB
+├ ƒ /api/account/active                         182 B         103 kB
+├ ƒ /api/account/invites                        182 B         103 kB
+├ ƒ /api/account/invites/[id]                   182 B         103 kB
+├ ƒ /api/account/invites/redeem                 182 B         103 kB
+├ ƒ /api/account/members                        182 B         103 kB
+├ ƒ /api/account/members/[memberUserId]         182 B         103 kB
+├ ƒ /api/alerts                                 182 B         103 kB
+├ ƒ /api/alerts/[id]                            182 B         103 kB
+├ ƒ /api/alerts/mark-all-read                   182 B         103 kB
+├ ƒ /api/auth/[...all]                          182 B         103 kB
+├ ƒ /api/cron/run                               182 B         103 kB
+├ ƒ /api/health                                 182 B         103 kB
+├ ƒ /api/targets/[id]                           182 B         103 kB
+├ ƒ /api/user/ai-models                         182 B         103 kB
+├ ƒ /api/user/context-intro                     182 B         103 kB
+├ ƒ /api/user/notification-destinations         182 B         103 kB
+├ ƒ /api/user/notification-destinations/[id]    182 B         103 kB
+├ ƒ /api/user/notification-settings             182 B         103 kB
+├ ƒ /api/user/notification-settings/test        182 B         103 kB
+├ ƒ /api/websites                               182 B         103 kB
+├ ƒ /api/websites/[id]                          182 B         103 kB
+├ ƒ /api/websites/[id]/share                    182 B         103 kB
+├ ƒ /api/websites/[id]/targets                  182 B         103 kB
+├ ƒ /dashboard                                   5 kB         111 kB
+├ ƒ /dashboard/alerts                           182 B         103 kB
+├ ƒ /dashboard/settings                         182 B         103 kB
+├ ƒ /dashboard/websites/[id]                    166 B         106 kB
+├ ○ /icon.svg                                     0 B            0 B
+├ ƒ /invite/[token]                           1.22 kB         107 kB
+├ ƒ /onboarding/context-dev                     182 B         103 kB
+├ ƒ /share/[token]                            9.77 kB         116 kB
+├ ƒ /sign-in                                  1.39 kB         117 kB
+└ ƒ /sign-up                                  1.44 kB         117 kB
++ First Load JS shared by all                  102 kB
+  ├ chunks/255-4f84124391a7dac4.js            46.3 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js       54.2 kB
+  └ other shared chunks (total)               1.92 kB
+
+
+ƒ Middleware                                  32.7 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

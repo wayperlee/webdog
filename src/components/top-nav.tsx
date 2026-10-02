@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/dashboard", label: "Websites" },
-  { href: "/dashboard/alerts", label: "Alerts" },
   { href: "/dashboard/settings", label: "Settings" },
 ] as const;
 
@@ -25,7 +24,6 @@ export function UnreadAlertsNavBadge({ count }: { count: number }) {
 
 export function TopNav({
   className = "",
-  unreadAlertCount = 0,
 }: {
   className?: string;
   unreadAlertCount?: number;
@@ -36,17 +34,11 @@ export function TopNav({
       {links.map(({ href, label }) => {
         const active =
           pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
-        const alertsUnread = href === "/dashboard/alerts" ? unreadAlertCount : 0;
         return (
           <Link
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            aria-label={
-              alertsUnread > 0
-                ? `${label}, ${alertsUnread} unread`
-                : undefined
-            }
             className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm transition ${
               active
                 ? "bg-neutral-900 text-cream-100"
@@ -54,9 +46,6 @@ export function TopNav({
             }`}
           >
             {label}
-            {href === "/dashboard/alerts" ? (
-              <UnreadAlertsNavBadge count={unreadAlertCount} />
-            ) : null}
           </Link>
         );
       })}

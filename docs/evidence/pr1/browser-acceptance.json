@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-02",
+  "tool": "ego-browser",
+  "checks": [
+    "sign-up directly reaches dashboard without provider keys",
+    "create website from full page URL; only sitemap target saved",
+    "sign-out and sign-in succeed",
+    "website detail explicitly states sitemap checks unavailable"
+  ],
+  "statusFixAcceptance": {
+    "views": [
+      "grid",
+      "list"
+    ],
+    "fixtures": [
+      "retained unread alert and snapshot",
+      "never-checked website"
+    ],
+    "checksUnavailableInBothViews": true,
+    "legacyBadgesAbsent": true,
+    "historicalContentDigestUnchanged": true
+  }
+}

@@ -1,3 +1,4 @@
+import { requireLegacyCapability } from "./legacy-capabilities";
 /**
  * Typed wrapper around the context.dev TypeScript SDK.
  * Docs: https://docs.context.dev/api-reference
@@ -25,6 +26,7 @@ export class ContextDevError extends Error {
  * is configured on the server.
  */
 function resolveApiKey(override?: string | null): string {
+  requireLegacyCapability();
   const key = effectiveContextDevApiKey(override);
   if (key) return key;
   throw new ContextDevError(
@@ -59,6 +61,7 @@ function toContextDevError(err: unknown): ContextDevError {
 }
 
 async function withContextDevErrors<T>(fn: () => Promise<T>): Promise<T> {
+  requireLegacyCapability();
   try {
     return await fn();
   } catch (err) {

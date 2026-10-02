@@ -84,17 +84,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   return NextResponse.json({ website: updated });
 }
 
-export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { user, ownerId, response } = await requireApiUserWithWriteOwner();
-  if (!user || !ownerId) return response!;
-  const { id } = await params;
-
-  const result = await db
-    .delete(schema.website)
-    .where(
-      and(eq(schema.website.id, id), eq(schema.website.userId, ownerId), websiteOwnerAccessible(user.id)),
-    )
-    .returning({ id: schema.website.id });
-  if (result.length === 0) return notFound("Website not found");
-  return NextResponse.json({ ok: true });
+export async function DELETE() {
+  return NextResponse.json({ error: "CAPABILITY_DISABLED" }, {
+    status: 405, headers: { Allow: "GET, HEAD" },
+  });
 }

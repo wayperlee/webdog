@@ -1,0 +1,5 @@
+
+> webdog-ai@0.1.0 worker:once
+> tsx scripts/worker.ts --once
+
+CHECKS_NOT_AVAILABLE: the legacy Context.dev worker is disabled in PR 1.

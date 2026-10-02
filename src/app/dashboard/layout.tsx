@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
@@ -7,7 +6,6 @@ import { websiteOwnerAccessible } from "@/lib/account-access";
 import { getEffectiveAccountOwnerForWrites, loadAccountChoices } from "@/lib/effective-account";
 import { APP_NAME } from "@/lib/product-info";
 import { requireUser } from "@/lib/session";
-import { isContextDevApiKeyManagedByEnv } from "@/lib/server-managed-config";
 import { AccountSwitcher } from "@/components/account-switcher";
 import { MobileNav } from "@/components/mobile-nav";
 import { TopNav } from "@/components/top-nav";
@@ -20,14 +18,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const logoOwnerId = logoScope.ok ? logoScope.ownerId : user.id;
   const accountChoices = await loadAccountChoices(user.id);
 
-  const [profile] = await db
-    .select({
-      dismissed: schema.user.contextIntroDismissedAt,
-    })
-    .from(schema.user)
-    .where(eq(schema.user.id, user.id))
-    .limit(1);
-
   const [logoRow] = await db
     .select({
       avatarLogoUrl: schema.userNotificationSettings.accountBrandLogoUrl,
@@ -35,10 +25,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .from(schema.userNotificationSettings)
     .where(eq(schema.userNotificationSettings.userId, logoOwnerId))
     .limit(1);
-
-  if (!profile?.dismissed && !isContextDevApiKeyManagedByEnv()) {
-    redirect("/onboarding/context-dev");
-  }
 
   const [unreadRow] = await db
     .select({ n: sql<number>`count(*)`.mapWith(Number) })
@@ -98,20 +84,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       <main className="relative min-w-0">{children}</main>
 
-      <a
-        href="https://link.context.dev/webdog"
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label="Built using Context.dev"
-        className="fixed bottom-3 right-3 z-30 opacity-90 transition-opacity hover:opacity-100 sm:bottom-4 sm:right-4"
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/fortunecookie.png"
-          alt="Built using Context.dev"
-          className="w-40 drop-shadow-md sm:w-52"
-        />
-      </a>
+
     </div>
   );
 }
