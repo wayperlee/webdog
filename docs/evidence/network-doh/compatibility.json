@@ -1,0 +1,123 @@
+{
+  "resolver": "cloudflare-doh",
+  "reports": [
+    {
+      "site": "https://happy-horse.art",
+      "observedAt": "2026-10-02T05:20:15.320Z",
+      "elapsedMs": 4657,
+      "first": {
+        "completeness": "complete",
+        "observedUrlCount": 198,
+        "outOfScopeUrlCount": 0,
+        "roots": [
+          "https://happy-horse.art/sitemap.xml"
+        ],
+        "scopeFingerprint": "1ec2a4c7b4daa00ee08e93f42adefccbc352439071a1a09e07e4376ab8fe0e70",
+        "sources": [
+          {
+            "url": "https://happy-horse.art/sitemap.xml",
+            "depth": 0,
+            "parents": [],
+            "status": "fetched",
+            "finalUrl": "https://happy-horse.art/sitemap.xml",
+            "revisionId": "aa4e453bcec41d33dbb6ae756c2ac7352e603ab69ba1d19116a3288cabad2171"
+          }
+        ],
+        "retiredSources": [],
+        "issues": [],
+        "compressedBytes": 1505,
+        "inflatedBytes": 34546,
+        "urlCount": 198,
+        "urlSetHash": "735476055c7ed1981f106008b586f892124a499a51a3bc5598cfcb5a3f6e8d83",
+        "notModifiedCount": 0,
+        "retainedRevisionCount": 1
+      },
+      "second": {
+        "completeness": "complete",
+        "observedUrlCount": 198,
+        "outOfScopeUrlCount": 0,
+        "roots": [
+          "https://happy-horse.art/sitemap.xml"
+        ],
+        "scopeFingerprint": "1ec2a4c7b4daa00ee08e93f42adefccbc352439071a1a09e07e4376ab8fe0e70",
+        "sources": [
+          {
+            "url": "https://happy-horse.art/sitemap.xml",
+            "depth": 0,
+            "parents": [],
+            "status": "not_modified",
+            "finalUrl": "https://happy-horse.art/sitemap.xml",
+            "revisionId": "aa4e453bcec41d33dbb6ae756c2ac7352e603ab69ba1d19116a3288cabad2171"
+          }
+        ],
+        "retiredSources": [],
+        "issues": [],
+        "compressedBytes": 0,
+        "inflatedBytes": 0,
+        "urlCount": 198,
+        "urlSetHash": "735476055c7ed1981f106008b586f892124a499a51a3bc5598cfcb5a3f6e8d83",
+        "notModifiedCount": 1,
+        "retainedRevisionCount": 1
+      }
+    },
+    {
+      "site": "https://www.sitemaps.org",
+      "observedAt": "2026-10-02T05:20:19.782Z",
+      "elapsedMs": 4460,
+      "first": {
+        "completeness": "complete",
+        "observedUrlCount": 84,
+        "outOfScopeUrlCount": 0,
+        "roots": [
+          "https://www.sitemaps.org/sitemap.xml"
+        ],
+        "scopeFingerprint": "67decda196fef71c1b05278c42c5190af7fece8547ece7193d236ff3f5b857ac",
+        "sources": [
+          {
+            "url": "https://www.sitemaps.org/sitemap.xml",
+            "depth": 0,
+            "parents": [],
+            "status": "fetched",
+            "finalUrl": "https://www.sitemaps.org/sitemap.xml",
+            "revisionId": "935d068a1fb546e38f04c07176b733ee18e8cfa12c99c1bee990dff08057f89e"
+          }
+        ],
+        "retiredSources": [],
+        "issues": [],
+        "compressedBytes": 873,
+        "inflatedBytes": 8667,
+        "urlCount": 84,
+        "urlSetHash": "47fbf97546753f07c3d7ceede4a05394b4e830566edd4e83088e7b8f56db8d9c",
+        "notModifiedCount": 0,
+        "retainedRevisionCount": 1
+      },
+      "second": {
+        "completeness": "complete",
+        "observedUrlCount": 84,
+        "outOfScopeUrlCount": 0,
+        "roots": [
+          "https://www.sitemaps.org/sitemap.xml"
+        ],
+        "scopeFingerprint": "67decda196fef71c1b05278c42c5190af7fece8547ece7193d236ff3f5b857ac",
+        "sources": [
+          {
+            "url": "https://www.sitemaps.org/sitemap.xml",
+            "depth": 0,
+            "parents": [],
+            "status": "fetched",
+            "finalUrl": "https://www.sitemaps.org/sitemap.xml",
+            "revisionId": "935d068a1fb546e38f04c07176b733ee18e8cfa12c99c1bee990dff08057f89e"
+          }
+        ],
+        "retiredSources": [],
+        "issues": [],
+        "compressedBytes": 499,
+        "inflatedBytes": 8622,
+        "urlCount": 84,
+        "urlSetHash": "47fbf97546753f07c3d7ceede4a05394b4e830566edd4e83088e7b8f56db8d9c",
+        "notModifiedCount": 0,
+        "retainedRevisionCount": 1
+      }
+    }
+  ]
+}

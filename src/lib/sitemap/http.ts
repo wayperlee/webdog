@@ -6,6 +6,7 @@ import { lookup } from "node:dns/promises";
 import { Readable, type Duplex } from "node:stream";
 import { createGunzip } from "node:zlib";
 import ipaddr from "ipaddr.js";
+import { createCloudflareDohResolver, type DnsResolver } from "./dns";
 import { CrawlBudget } from "./budget";
 import { SitemapError, type SourceCache } from "./types";
 import { hostname, isPublicAddress, normalizeHttpUrl } from "./urls";
@@ -15,7 +16,7 @@ export type HttpResult = { status: 200 | 304; finalUrl: string; body: Buffer; et
 export type FetchOptions = { cache?: SourceCache; maxBodyBytes?: number };
 export type SitemapFetcher = (url: string, budget: CrawlBudget, options?: FetchOptions) => Promise<HttpResult>;
 type Dependencies = {
-  resolve?: (host: string) => Promise<Address[]>;
+  resolve?: DnsResolver;
   connect?: (address: Address, port: number, signal: AbortSignal) => Promise<net.Socket>;
 };
 
@@ -157,7 +158,7 @@ export function createSafeFetcher(dependencies: Dependencies = {}): SitemapFetch
       const agent = url.protocol === "https:" ? new https.Agent({ keepAlive: false }) : new http.Agent({ keepAlive: false });
       let response: http.IncomingMessage | undefined;
       try {
-        const addresses = await aborted(net.isIP(host) ? Promise.resolve([{ address: host, family: net.isIP(host) }]) : resolve(host), controller.signal);
+        const addresses = await aborted(net.isIP(host) ? Promise.resolve([{ address: host, family: net.isIP(host) }]) : resolve(host, controller.signal), controller.signal);
         if (!addresses.length || addresses.length > 64 || addresses.some((entry) => !isPublicAddress(entry.address) || net.isIP(entry.address) !== entry.family)) {
           throw new SitemapError("UNSAFE_ADDRESS", "DNS returned a non-public or invalid address");
         }
@@ -217,4 +218,10 @@ export function createSafeFetcher(dependencies: Dependencies = {}): SitemapFetch
   };
 }
 
-export const fetchSitemap = createSafeFetcher();
+export function createConfiguredFetcher(mode = process.env.SITEMAP_DNS_RESOLVER || "system"): SitemapFetcher {
+  if (mode === "system") return createSafeFetcher();
+  if (mode === "cloudflare-doh") return createSafeFetcher({ resolve: createCloudflareDohResolver() });
+  throw new SitemapError("INVALID_DNS_RESOLVER", "SITEMAP_DNS_RESOLVER must be system or cloudflare-doh");
+}
+
+export const fetchSitemap = createConfiguredFetcher();

@@ -1,0 +1,68 @@
+{
+  "observedAt": "2026-10-02T05:21:59.759Z",
+  "origin": "http://localhost:31072",
+  "resolver": "cloudflare-doh",
+  "websiteId": "web_muqin6i72Lg0Tvne",
+  "targetId": "tgt_muqin6i81RYdA3A2",
+  "checks": [
+    "authenticated website creation and manual queue submission succeeded without provider keys",
+    "default production Worker used cloudflare-doh; two real sitemap graphs completed without a fixture fetcher",
+    "first complete Run adopted a zero-event baseline; following complete Run used the inventory/CAS path"
+  ],
+  "runs": [
+    {
+      "id": "e0832879-c12f-4188-8715-05b38d490085",
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "baseline",
+      "attempt": 1,
+      "error": null,
+      "url_count": 198,
+      "events": 0,
+      "inventoryCount": 198,
+      "worker": [
+        {
+          "workerId": "worker-46c405d7-fdba-4def-98c3-33c7958b4f34",
+          "dnsResolver": "cloudflare-doh",
+          "event": "started"
+        },
+        {
+          "workerId": "worker-46c405d7-fdba-4def-98c3-33c7958b4f34",
+          "recovered": 0,
+          "scheduled": 0,
+          "runId": "e0832879-c12f-4188-8715-05b38d490085",
+          "attempt": 1,
+          "outcome": "finished"
+        }
+      ]
+    },
+    {
+      "id": "57c76b78-4683-4a57-bbde-91b5430abdf5",
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "applied",
+      "attempt": 1,
+      "error": null,
+      "url_count": 198,
+      "events": 0,
+      "inventoryCount": 198,
+      "worker": [
+        {
+          "workerId": "worker-c7e17ded-58f0-459a-92e9-a01e8585ed69",
+          "dnsResolver": "cloudflare-doh",
+          "event": "started"
+        },
+        {
+          "workerId": "worker-c7e17ded-58f0-459a-92e9-a01e8585ed69",
+          "recovered": 0,
+          "scheduled": 0,
+          "runId": "57c76b78-4683-4a57-bbde-91b5430abdf5",
+          "attempt": 1,
+          "outcome": "finished"
+        }
+      ]
+    }
+  ],
+  "fixture": false,
+  "productionTouched": false
+}

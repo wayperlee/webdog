@@ -14,6 +14,7 @@ async function main() {
   const queue = new CrawlQueue(getPool());
   const once = process.argv.includes("--once");
   const workerId = `worker-${randomUUID()}`;
+  console.log(JSON.stringify({ workerId, dnsResolver: process.env.SITEMAP_DNS_RESOLVER || "system", event: "started" }));
   let lastGc = 0;
   try {
     do {

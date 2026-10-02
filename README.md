@@ -8,6 +8,9 @@
 > Candidates. Suspicious results are quarantined; owner approval supplies first evidence.
 > Worker confirmation and reference-aware GC preserve the frozen adoption contract.
 > Dashboard inventory/history/filter UI arrives in PR 5.
+> On fake-IP networks, set `SITEMAP_DNS_RESOLVER=cloudflare-doh` in the Worker
+> environment and restart it; public-IP, peer and TLS checks remain enabled.
+> See [DNS configuration and live acceptance](docs/network-doh.md).
 >
 > Read [frozen P0 contract](docs/p0-contract-v1.md), [PR 1 scope/evidence](docs/pr1-foundation.md)
 > [native engine](docs/pr2-native-sitemap.md), [queue operations/evidence](docs/pr3-durable-queue.md)
