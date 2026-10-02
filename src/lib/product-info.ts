@@ -1,4 +1,4 @@
-export const APP_NAME = "webdog.ai";
+export const APP_NAME = "Sitemap Radar";
 export const APP_SLUG = "webdog-ai";
 export const WEBHOOK_EVENT_PREFIX = "webdog_ai";
 

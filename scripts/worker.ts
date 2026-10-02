@@ -6,8 +6,10 @@ import { getPool } from "../src/lib/db";
 import { CrawlQueue } from "../src/lib/crawl-queue";
 import { collectCrawlGarbage } from "../src/lib/crawl-gc";
 import { executeClaim } from "../src/lib/crawl-worker";
-import { databaseReady, writeWorkerHealth, type WorkerHealth } from "../src/lib/runtime-health";
+import { databaseReady, workerReady, writeWorkerHealth, type WorkerHealth } from "../src/lib/runtime-health";
 import { envInteger } from "../src/lib/runtime-config";
+import { startWorkerHealthServer, closeWorkerHealthServer } from "../src/lib/worker-health-server";
+import type { Server } from "node:http";
 
 async function main() {
   const controller = new AbortController();
@@ -30,9 +32,18 @@ async function main() {
   const health = async () => { if (process.env.WORKER_HEALTH_FILE) await writeWorkerHealth(process.env.WORKER_HEALTH_FILE, state); };
   console.log(JSON.stringify({ workerId, dnsResolver: process.env.SITEMAP_DNS_RESOLVER || "system", event: "started", poolMax: queue.pool.options.max }));
   let lastGc = 0;
+  let healthServer: Server | undefined;
   try {
     await databaseReady(queue.pool);
     state.lastTickAt = Date.now(); await health();
+    if (process.env.WORKER_HEALTH_PORT) {
+      const path = process.env.WORKER_HEALTH_FILE;
+      if (!path) throw new Error("WORKER_HEALTH_FILE_REQUIRED");
+      healthServer = await startWorkerHealthServer(
+        envInteger(process.env, "WORKER_HEALTH_PORT", 3001, 1, 65535),
+        () => workerReady(queue.pool, path),
+      );
+    }
     do {
       try {
         if (Date.now() - lastGc >= 3_600_000) { await collectCrawlGarbage(queue.pool); lastGc = Date.now(); }
@@ -53,6 +64,7 @@ async function main() {
     } while (!once && !controller.signal.aborted);
   } finally {
     state.stopping = true; await health().catch(() => {});
+    if (healthServer) await closeWorkerHealthServer(healthServer);
     await queue.pool.end();
     if (shutdownTimer) clearTimeout(shutdownTimer);
     process.removeListener("SIGINT", stop); process.removeListener("SIGTERM", stop);

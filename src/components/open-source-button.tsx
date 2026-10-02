@@ -1,4 +1,4 @@
-export const GITHUB_REPO_URL = "https://github.com/context-dot-dev/webdog";
+export const GITHUB_REPO_URL = "https://github.com/wayperlee/webdog";
 
 /**
  * Always-visible floating pill (bottom-left, rendered from the root layout)
@@ -10,7 +10,7 @@ export function OpenSourceButton() {
       href={GITHUB_REPO_URL}
       target="_blank"
       rel="noreferrer noopener"
-      aria-label="webdog.ai is open source — view the code on GitHub"
+      aria-label="Sitemap Radar is open source — view the code on GitHub"
       className="fixed bottom-3 left-3 z-30 inline-flex items-center gap-2 rounded-full bg-neutral-900 py-2 pl-3.5 pr-4 text-xs font-semibold text-cream-100 shadow-notif ring-1 ring-white/10 transition hover:bg-neutral-800 active:scale-[0.98] sm:bottom-4 sm:left-4"
     >
       <GitHubMarkIcon className="size-4 shrink-0" />

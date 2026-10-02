@@ -1,0 +1,3 @@
+# Local control-plane testing only. Never use the QA localhost DSN on Cloudflare.
+DATABASE_URL=postgresql://radar:replace-me@database-host:5432/radar?sslmode=verify-full
+BETTER_AUTH_SECRET=replace-with-a-new-random-secret-at-least-32-characters

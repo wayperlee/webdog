@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sitemap-radar",
+  "account_id": "b54b5ffc6bfe3178cf2e09d1bce9ab75",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-02",
+  "workers_dev": false,
+  "routes": [{ "pattern": "sitemap.lipeiwei.com", "custom_domain": true }],
+  "observability": { "enabled": true },
+  "triggers": { "crons": ["* * * * *"] },
+  "vars": {
+    "RADAR_ENABLED": "false",
+    "DATABASE_SCHEMA": "sitemap_radar",
+    "BETTER_AUTH_URL": "https://sitemap.lipeiwei.com",
+    "SITEMAP_DNS_RESOLVER": "cloudflare-doh"
+  },
+  "containers": [
+    { "class_name": "RadarWeb", "image": "../../Dockerfile", "instance_type": "basic", "max_instances": 1 },
+    { "class_name": "RadarCrawler", "image": "../../Dockerfile", "instance_type": "basic", "max_instances": 1 }
+  ],
+  "durable_objects": {
+    "bindings": [
+      { "name": "RADAR_WEB", "class_name": "RadarWeb" },
+      { "name": "RADAR_CRAWLER", "class_name": "RadarCrawler" }
+    ]
+  },
+  "exports": {
+    "RadarWeb": { "type": "durable-object", "storage": "sqlite" },
+    "RadarCrawler": { "type": "durable-object", "storage": "sqlite" }
+  }
+}

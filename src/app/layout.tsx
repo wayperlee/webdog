@@ -4,9 +4,9 @@ import { OpenSourceButton } from "@/components/open-source-button";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: `${APP_NAME}: open-source website change monitoring`,
+  title: `${APP_NAME}: sitemap change monitoring`,
   description:
-    "Watch websites for new links, removed links, or content changes. Open-source, self-hostable, PostgreSQL-backed.",
+    "Track sitemap URLs and review additions, removals and reappearances.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

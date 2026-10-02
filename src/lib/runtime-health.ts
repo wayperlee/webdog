@@ -10,6 +10,10 @@ function boundedQuery(pool: Pool, text: string, values: unknown[] = []) {
 }
 /** Reachability and P0 schema readiness, never discloses a DSN or database diagnostics. */
 export async function databaseReady(pool: Pool) {
+  if (process.env.DATABASE_SCHEMA) {
+    const { rows: [schema] } = await boundedQuery(pool, "SELECT current_schema() AS name");
+    if (schema?.name !== process.env.DATABASE_SCHEMA) throw new Error("SCHEMA_NOT_READY");
+  }
   const { rows: [row] } = await boundedQuery(pool,
     `SELECT NOT EXISTS(SELECT 1 FROM unnest($1::text[]) AS names(name) WHERE to_regclass(quote_ident(name)) IS NULL)
       AND EXISTS(SELECT 1 FROM pg_index WHERE indexrelid=to_regclass('crawl_run_one_active_per_target') AND indisunique AND indisvalid) AS ok`,
