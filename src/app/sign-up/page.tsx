@@ -1,22 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { previewInviteFromRawToken } from "@/lib/account-invite-preview";
-import { signUpInviteSubtitle } from "@/lib/auth-invite-copy";
 import { APP_NAME } from "@/lib/product-info";
 import { getCurrentSession } from "@/lib/session";
 import { SignUpForm } from "./form";
 
-export default async function SignUpPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ invite?: string }>;
-}) {
+export default async function SignUpPage() {
   const session = await getCurrentSession();
   if (session?.user) redirect("/dashboard");
-
-  const { invite } = await searchParams;
-  const inviteToken = invite?.trim() || null;
-  const invitePreview = inviteToken ? await previewInviteFromRawToken(inviteToken) : null;
 
   return (
     <main className="grid min-h-dvh grid-cols-1 bg-cream-100 lg:grid-cols-[1fr_42%]">
@@ -29,12 +19,12 @@ export default async function SignUpPage({
         </Link>
         <div className="mx-auto w-full max-w-xs">
           <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Create your account</h1>
-          <p className="mt-2 text-sm text-neutral-600">{signUpInviteSubtitle(inviteToken, invitePreview)}</p>
-          <SignUpForm className="mt-8" inviteToken={inviteToken} />
+          <p className="mt-2 text-sm text-neutral-600">Create an account to manage your websites.</p>
+          <SignUpForm className="mt-8" />
           <p className="mt-6 text-sm text-neutral-600">
             Already have an account?{" "}
             <Link
-              href={inviteToken ? `/sign-in?invite=${encodeURIComponent(inviteToken)}` : "/sign-in"}
+              href="/sign-in"
               className="font-semibold text-brand-600 hover:text-brand-700"
             >
               Sign in
@@ -53,13 +43,13 @@ export default async function SignUpPage({
         </div>
         <div className="relative flex h-full flex-col justify-center p-12">
           <h2 className="max-w-[20ch] text-balance text-4xl font-semibold tracking-tight">
-            Three ways to watch any website.
+            Watch sitemap URL changes.
           </h2>
           <ul role="list" className="mt-10 space-y-3">
             {[
               { c: "bg-mint", icon: "🌱", t: "New links", d: "Alert me when a sitemap grows." },
               { c: "bg-peach", icon: "🍂", t: "Removed links", d: "Alert me when something disappears." },
-              { c: "bg-lavender", icon: "🔍", t: "Page content", d: "Watch a single page, paragraph-level." },
+              { c: "bg-lavender", icon: "↩", t: "Reappeared links", d: "See when a sitemap URL returns." },
             ].map((row) => (
               <li
                 key={row.t}

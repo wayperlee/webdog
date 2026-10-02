@@ -1,3 +1,4 @@
+import { requireLegacyCapability } from "./legacy-capabilities";
 /**
  * Per-website scrape + diff pipeline. The worker calls `runWebsiteChecks(websiteId)`
  * on a schedule; this module is also used by the manual-trigger API route.
@@ -331,6 +332,7 @@ export async function runWebsiteChecks(
   websiteId: string,
   options?: RunWebsiteChecksOptions,
 ): Promise<{ alerts: number; errors: number }> {
+  requireLegacyCapability();
   const [website] = await db.select().from(schema.website).where(eq(schema.website.id, websiteId)).limit(1);
   if (!website) throw new Error(`website ${websiteId} not found`);
 
@@ -629,6 +631,7 @@ export async function runWebsiteChecks(
 }
 
 export async function runAllChecks(): Promise<{ websites: number; alerts: number; errors: number }> {
+  requireLegacyCapability();
   const websites = await db.select({ id: schema.website.id }).from(schema.website);
   let alerts = 0;
   let errors = 0;

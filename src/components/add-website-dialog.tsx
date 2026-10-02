@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { flushSync } from "react-dom";
 import { useRouter } from "next/navigation";
 import { normalizeDomain } from "@/lib/domain";
 import {
-  buildInitialPageUrl,
   parseWebsiteUrlInput,
 } from "@/lib/website-url-input";
 
@@ -13,19 +11,16 @@ export function AddWebsiteDialog() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [domain, setDomain] = useState("");
-  const [pagePath, setPagePath] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   function applyParsedInput(raw: string) {
-    const { domainHost, pagePath: path } = parseWebsiteUrlInput(raw);
+    const { domainHost } = parseWebsiteUrlInput(raw);
     setDomain(domainHost);
-    setPagePath(domainHost ? path : null);
   }
 
   function reset() {
     setDomain("");
-    setPagePath(null);
     setError(null);
     setLoading(false);
   }
@@ -41,8 +36,7 @@ export function AddWebsiteDialog() {
     }
 
     setLoading(true);
-    const body: { domain: string; initialPagePath?: string } = { domain: normalized };
-    if (pagePath) body.initialPagePath = pagePath;
+    const body = { domain: normalized };
 
     const res = await fetch("/api/websites", {
       method: "POST",
@@ -61,19 +55,6 @@ export function AddWebsiteDialog() {
     router.push(`/dashboard/websites/${website.id}`);
     router.refresh();
   }
-
-  const pagePreview =
-    pagePath && domain.trim()
-      ? (() => {
-          try {
-            const norm = normalizeDomain(domain);
-            if (!norm) return null;
-            return buildInitialPageUrl(norm, pagePath);
-          } catch {
-            return null;
-          }
-        })()
-      : null;
 
   return (
     <>
@@ -98,11 +79,11 @@ export function AddWebsiteDialog() {
             >
               <h2 className="text-base font-semibold text-neutral-900">Add a website to watch</h2>
               <p className="mt-1 text-sm text-neutral-600">
-                Enter a domain and we&apos;ll pull in its brand, logo, and description automatically.
+                Add a domain for sitemap monitoring. No provider API key is required.
               </p>
               <div className="mt-6">
                 <label htmlFor="w-domain" className="block text-sm font-medium text-neutral-900">
-                  Domain or page URL
+                  Domain
                 </label>
                 <div className="relative mt-1.5">
                   <span
@@ -140,15 +121,8 @@ export function AddWebsiteDialog() {
                   />
                 </div>
                 <p className="mt-2 text-xs text-neutral-500">
-                  Paste a domain or a full page link. Domains use the sitemap for link changes; page links also get a
-                  content monitor for that URL.
+                  Paste a domain or URL. Only the domain is saved; page content monitoring is unavailable.
                 </p>
-                {pagePreview && (
-                  <p className="mt-2 text-xs text-neutral-700">
-                    We&apos;ll also watch{" "}
-                    <span className="font-mono text-neutral-900">{pagePreview}</span> for content changes.
-                  </p>
-                )}
               </div>
               {error && (
                 <p className="mt-4 text-sm text-brand-700" role="alert">
@@ -167,7 +141,7 @@ export function AddWebsiteDialog() {
                   Cancel
                 </button>
                 <button type="submit" disabled={loading || !domain.trim()} className="btn-accent">
-                  {loading ? "Fetching brand…" : "Add website"}
+                  {loading ? "Saving…" : "Add website"}
                 </button>
               </div>
             </form>

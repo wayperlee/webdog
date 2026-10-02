@@ -1,0 +1,26 @@
+
+> webdog-ai@0.1.0 test
+> tsx --test src/**/*.test.ts
+
+✔ explicit suppress:true is honored and reason is kept (0.828166ms)
+✔ explicit suppress:false surfaces the alert (0.060292ms)
+✔ JSON wrapped in prose or code fences is still parsed (0.065ms)
+✔ suppress:true with no reason gets a default reason (0.0795ms)
+✔ malformed JSON fails open (0.052833ms)
+✔ no JSON object at all fails open (0.04775ms)
+✔ empty, null, and undefined all fail open (0.048958ms)
+✔ stringified 'true' is not a boolean and must not suppress (0.055917ms)
+✔ truthy non-boolean (1) must not suppress (0.064667ms)
+✔ missing suppress key fails open (0.085916ms)
+✔ a JSON array (not an object) fails open (0.052667ms)
+✔ an over-long reason is truncated (0.050542ms)
+✔ legacy destructive and outbound capabilities are closed (0.831875ms)
+✔ base auth and owned website/target routes remain available (0.082584ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 313.791584

@@ -1,24 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { previewInviteFromRawToken } from "@/lib/account-invite-preview";
-import { signInInviteSubtitle } from "@/lib/auth-invite-copy";
 import { APP_NAME } from "@/lib/product-info";
 import { getCurrentSession } from "@/lib/session";
 import { SignInForm } from "./form";
 
-export default async function SignInPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ invite?: string }>;
-}) {
+export default async function SignInPage() {
   const session = await getCurrentSession();
   if (session?.user) redirect("/dashboard");
-
-  const { invite } = await searchParams;
-  const inviteToken = invite?.trim() || null;
-  const invitePreview = inviteToken
-    ? await previewInviteFromRawToken(inviteToken)
-    : null;
 
   return (
     <main className="grid min-h-dvh grid-cols-1 bg-cream-100 lg:grid-cols-[1fr_42%]">
@@ -34,17 +22,13 @@ export default async function SignInPage({
             Welcome back
           </h1>
           <p className="mt-2 text-sm text-neutral-600">
-            {signInInviteSubtitle(inviteToken, invitePreview)}
+            Sign in to manage your websites.
           </p>
-          <SignInForm className="mt-8" inviteToken={inviteToken} />
+          <SignInForm className="mt-8" />
           <p className="mt-6 text-sm text-neutral-600">
             New here?{" "}
             <Link
-              href={
-                inviteToken
-                  ? `/sign-up?invite=${encodeURIComponent(inviteToken)}`
-                  : "/sign-up"
-              }
+              href="/sign-up"
               className="font-semibold text-brand-600 hover:text-brand-700"
             >
               Create an account
@@ -118,8 +102,7 @@ function AsidePanel() {
             Your friendly little web watcher.
           </p>
           <p className="mt-3 max-w-[36ch] text-pretty text-sm text-neutral-700">
-            Screenshots and diffs when the pages you rely on change, without
-            another brittle scraper.
+            Manage your saved websites and sitemap monitor settings.
           </p>
         </div>
         <div className="flex items-center gap-2 text-xs text-neutral-700">

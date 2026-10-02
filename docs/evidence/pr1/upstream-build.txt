@@ -1,0 +1,97 @@
+
+> webdog-ai@0.1.0 build
+> next build
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/lipeiwei/package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles:
+   * /Users/lipeiwei/Documents/Codex/2026-10-02/new-chat/work/webdog-review/package-lock.json
+
+   ▲ Next.js 15.5.18
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.9s
+   Linting and checking validity of types ...
+
+./src/app/dashboard/layout.tsx
+108:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/app/page.tsx
+95:14  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+280:22  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+375:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/add-website-dialog.tsx
+4:10  Warning: 'flushSync' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/animated-notif-list.tsx
+71:13  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/monitor-card.tsx
+524:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/public-monitor-card.tsx
+106:16  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+
+./src/components/system-services-settings.tsx
+18:20  Warning: '_key' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/context-client.ts
+7:10  Warning: 'normalizeDomain' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/25) ...
+   Generating static pages (6/25)
+   Generating static pages (12/25)
+   Generating static pages (18/25)
+ ✓ Generating static pages (25/25)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                      Size  First Load JS
+┌ ƒ /                                         1.87 kB         108 kB
+├ ○ /_not-found                                  1 kB         103 kB
+├ ƒ /api/account/active                         196 B         103 kB
+├ ƒ /api/account/invites                        196 B         103 kB
+├ ƒ /api/account/invites/[id]                   196 B         103 kB
+├ ƒ /api/account/invites/redeem                 196 B         103 kB
+├ ƒ /api/account/members                        196 B         103 kB
+├ ƒ /api/account/members/[memberUserId]         196 B         103 kB
+├ ƒ /api/alerts                                 196 B         103 kB
+├ ƒ /api/alerts/[id]                            196 B         103 kB
+├ ƒ /api/alerts/mark-all-read                   196 B         103 kB
+├ ƒ /api/auth/[...all]                          196 B         103 kB
+├ ƒ /api/cron/run                               196 B         103 kB
+├ ƒ /api/health                                 196 B         103 kB
+├ ƒ /api/targets/[id]                           196 B         103 kB
+├ ƒ /api/user/ai-models                         196 B         103 kB
+├ ƒ /api/user/context-intro                     196 B         103 kB
+├ ƒ /api/user/notification-destinations         196 B         103 kB
+├ ƒ /api/user/notification-destinations/[id]    196 B         103 kB
+├ ƒ /api/user/notification-settings             196 B         103 kB
+├ ƒ /api/user/notification-settings/test        196 B         103 kB
+├ ƒ /api/websites                               196 B         103 kB
+├ ƒ /api/websites/[id]                          196 B         103 kB
+├ ƒ /api/websites/[id]/share                    196 B         103 kB
+├ ƒ /api/websites/[id]/targets                  196 B         103 kB
+├ ƒ /dashboard                                5.39 kB         111 kB
+├ ƒ /dashboard/alerts                           725 B         112 kB
+├ ƒ /dashboard/settings                       28.5 kB         131 kB
+├ ƒ /dashboard/websites/[id]                  10.6 kB         126 kB
+├ ○ /icon.svg                                     0 B            0 B
+├ ƒ /invite/[token]                           1.17 kB         107 kB
+├ ƒ /onboarding/context-dev                   1.84 kB         108 kB
+├ ƒ /share/[token]                            1.36 kB         117 kB
+├ ƒ /sign-in                                  1.45 kB         117 kB
+└ ƒ /sign-up                                  1.51 kB         117 kB
++ First Load JS shared by all                  102 kB
+  ├ chunks/1255-b28ea36bf0cdbd65.js           46.3 kB
+  ├ chunks/4bd1b696-f785427dddbba9fb.js       54.2 kB
+  └ other shared chunks (total)               1.92 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

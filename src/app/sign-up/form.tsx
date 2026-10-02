@@ -8,10 +8,8 @@ import { caughtUnknownMessage } from "@/lib/caught-unknown-message";
 
 export function SignUpForm({
   className = "",
-  inviteToken = null,
 }: {
   className?: string;
-  inviteToken?: string | null;
 }) {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -33,11 +31,7 @@ export function SignUpForm({
           );
           return;
         }
-        const next =
-          inviteToken && inviteToken.trim().length > 0
-            ? `/invite/${encodeURIComponent(inviteToken.trim())}`
-            : "/onboarding/context-dev";
-        router.push(next);
+        router.push("/dashboard");
         router.refresh();
       } catch (caught) {
         setError(formatCredentialAuthUiError(caughtUnknownMessage(caught)));

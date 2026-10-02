@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { APP_NAME } from "@/lib/product-info";
 import { OpenSourceButton } from "@/components/open-source-button";
 import "./globals.css";
@@ -14,14 +13,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <body className="min-h-dvh bg-cream-100 font-sans text-neutral-900" suppressHydrationWarning>
-        <Script
-          src="https://plausible.io/js/pa-Ou4G9tTYPGSI77dWeauzs.js"
-          strategy="afterInteractive"
-        />
-        <Script id="plausible-init" strategy="afterInteractive">
-          {`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-plausible.init()`}
-        </Script>
         <div className="isolate">
           {children}
           <OpenSourceButton />

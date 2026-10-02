@@ -1,0 +1,14 @@
+{
+  "passed": 9,
+  "checks": [
+    "anonymous read denied",
+    "website and single sitemap target created without provider keys",
+    "cross-owner read and mutation denied",
+    "owned sitemap pause and interval preserved",
+    "unsupported payloads and duplicate sitemap targets rejected",
+    "five concurrent first creations on a zero-target site produce exactly one sitemap target",
+    "history digest detects equal-count payload, read and share-token mutations; negative controls rolled back",
+    "15 legacy routes closed; existing share token blocked; full historical record contents unchanged",
+    "authenticated dashboard bypasses Context.dev onboarding and hides legacy Alerts and health badges"
+  ]
+}

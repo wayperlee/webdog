@@ -1,3 +1,14 @@
+> **Sitemap Radar PR 1 checkpoint** — Forked from `context-dot-dev/webdog` at
+> `426158f543fbaf591f7248f1be62ebfa8b4d695c`. Authentication and website/sitemap-target
+> configuration work without provider keys. Legacy providers, sharing, invitations,
+> notifications, destructive deletes and synchronous checks are disabled. The worker
+> intentionally exits with `CHECKS_NOT_AVAILABLE`; native checks arrive in PR 2/3.
+>
+> Read [frozen P0 contract](docs/p0-contract-v1.md), [PR 1 scope/evidence](docs/pr1-foundation.md)
+> and [implementation issue draft](docs/p0-implementation-issue.md). The original upstream
+> README follows for attribution; its monitoring/deployment instructions do not describe
+> this intermediate checkpoint.
+
 <p align="center">
   <img src="./logo.png" width="120" alt="webdog.ai logo">
 </p>

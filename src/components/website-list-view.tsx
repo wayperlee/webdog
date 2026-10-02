@@ -116,7 +116,7 @@ export function WebsiteListView({
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-neutral-900">Websites</h1>
           <p className="mt-2 text-sm text-neutral-600">
-            Every site you&apos;re watching. Add a new one to start tracking changes.
+            Your saved websites and sitemap monitor settings.
           </p>
         </div>
 
@@ -200,11 +200,9 @@ function GridView({ websites }: { websites: Website[] }) {
                 className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[42%] bg-[linear-gradient(to_top,rgba(255,255,255,0.97)_0%,rgba(255,255,255,0.88)_12%,rgba(255,255,255,0.55)_38%,rgba(255,255,255,0.22)_68%,transparent_100%)]"
                 aria-hidden
               />
-              {Number(w.unreadAlerts) > 0 && (
-                <span className="absolute right-3 top-3 z-20 inline-flex items-center rounded-full bg-brand-500 px-2 py-0.5 text-xs font-medium text-white shadow-xs ring-1 ring-brand-600/20">
-                  {Number(w.unreadAlerts)} new
-                </span>
-              )}
+              <span className="absolute right-3 top-3 z-20 inline-flex items-center rounded-full bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 ring-1 ring-neutral-900/10">
+                Checks unavailable
+              </span>
             </div>
 
             <div className="relative z-10 flex flex-1 flex-col px-5 pb-5">
@@ -295,18 +293,9 @@ function ListView({ websites }: { websites: Website[] }) {
               </div>
             </dl>
 
-            {/* Unread badge */}
-            <div className="flex w-16 justify-end">
-              {Number(w.unreadAlerts) > 0 ? (
-                <span className="inline-flex items-center rounded-full bg-peach px-2.5 py-0.5 text-xs font-semibold text-neutral-900 ring-1 ring-neutral-900/5">
-                  {Number(w.unreadAlerts)} new
-                </span>
-              ) : (
-                <span className="inline-flex items-center rounded-full bg-mint/60 px-2.5 py-0.5 text-xs font-medium text-neutral-700 ring-1 ring-neutral-900/5">
-                  all clear
-                </span>
-              )}
-            </div>
+            <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 ring-1 ring-neutral-900/5">
+              Checks unavailable
+            </span>
 
             {/* Chevron */}
             <svg
@@ -349,9 +338,9 @@ function EmptyState({ templates }: { templates: StarterTemplateWithLogo[] }) {
   return (
     <div className="mx-auto max-w-3xl rounded-3xl bg-white p-6 ring-1 ring-neutral-900/5 sm:p-8">
       <div className="flex flex-col items-center text-center">
-        <h2 className="mt-3 text-base font-semibold text-neutral-900">Watch your first page</h2>
+        <h2 className="mt-3 text-base font-semibold text-neutral-900">Add your first website</h2>
         <p className="mt-1 max-w-[38ch] text-pretty text-sm text-neutral-600">
-          Add any site. We pull in its brand automatically and alert you the moment a page changes.
+          Save a domain for sitemap monitoring. No provider API key is required.
         </p>
         <div className="mt-4">
           <AddWebsiteDialog />
