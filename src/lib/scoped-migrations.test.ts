@@ -20,7 +20,7 @@ test("Private migrations keep every foreign key scoped and reject ledger drift",
   const privatePool = new Pool({ connectionString: url.toString(), max: 2, options: `-c search_path=${name}` });
   try {
     const migrated = await migratePrivateSchema(admin, name);
-    assert.equal(migrated.total, 9); assert.equal(migrated.applied, 9);
+    assert.equal(migrated.total, 10); assert.equal(migrated.applied, 10);
     await databaseReady(privatePool);
     const crossSchema = await admin.query(`SELECT count(*)::int AS n FROM pg_constraint c
       JOIN pg_class src ON src.oid=c.conrelid JOIN pg_namespace s ON s.oid=src.relnamespace

@@ -11,6 +11,7 @@ import {
   text,
   timestamp,
   type AnyPgColumn,
+  foreignKey,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import type { CrawlOptions } from "../sitemap";
@@ -130,6 +131,22 @@ export const notificationDestination = pgTable(
 /* Domain tables                                                      */
 /* ------------------------------------------------------------------ */
 
+export const competitorGroup = pgTable("competitor_group", {
+  id: text("id").primaryKey(),
+  ownerUserId: text("owner_user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  membershipVersion: integer("membership_version").notNull().default(1),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => ({
+  ownerIdentity: uniqueIndex("competitor_group_owner_identity").on(t.id, t.ownerUserId),
+  ownerName: uniqueIndex("competitor_group_owner_name").on(t.ownerUserId, sql`lower(btrim(${t.name}))`),
+  validName: check("competitor_group_name_check", sql`char_length(${t.name}) BETWEEN 1 AND 80 AND ${t.name}=btrim(${t.name})`),
+  validDescription: check("competitor_group_description_check", sql`char_length(${t.description})<=2000`),
+  validVersion: check("competitor_group_version_check", sql`${t.membershipVersion}>0`),
+}));
+
 export const website = pgTable(
   "website",
   {
@@ -140,6 +157,7 @@ export const website = pgTable(
     name: text("name").notNull(),
     url: text("url").notNull(),
     domain: text("domain").notNull(),
+    competitorGroupId: text("competitor_group_id"),
     title: text("title"),
     description: text("description"),
     logoUrl: text("logoUrl"),
@@ -159,6 +177,8 @@ export const website = pgTable(
   },
   (t) => ({
     byUser: index("website_user_idx").on(t.userId),
+    byGroup: index("website_owner_group_idx").on(t.userId, t.competitorGroupId, t.id),
+    groupOwner: foreignKey({ columns: [t.competitorGroupId, t.userId], foreignColumns: [competitorGroup.id, competitorGroup.ownerUserId], name: "website_group_owner_fk" }),
   }),
 );
 
