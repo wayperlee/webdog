@@ -1,0 +1,148 @@
+{
+  "observedAt": "2026-10-02T06:46:03.376Z",
+  "sourceDatabase": "127.0.0.1:55471/sitemap_radar_pr1",
+  "origin": "http://localhost:31072",
+  "resolver": "cloudflare-doh",
+  "fixtureFetcher": false,
+  "deliberateInvalidRoot": true,
+  "userSiteConfigurationChanged": false,
+  "checks": [
+    "Two real complete manual scans on supermaker.ai and happy-horse.art; zero first-baseline events; unchanged manual cadence",
+    "Default daemon created and completed a real scheduled Run, then advanced the fixed 6h cadence",
+    "Deliberately invalid real sitemap root failed without contaminating inventory; automatic discovery recovered in scope 3, preserving scope 1 history"
+  ],
+  "sites": [
+    {
+      "domain": "supermaker.ai",
+      "websiteId": "web_muqlmd7r0B_7-aJg",
+      "targetId": "tgt_muqlmd7tJOJozL7V",
+      "firstRunId": "42ec9672-b965-4001-a76b-d9471adc82cd",
+      "secondRunId": "0b74cce4-39ae-4b2d-af4e-5ae481bc6a07",
+      "observedUrls": 1735,
+      "inventoryCount": 1735,
+      "events": 0
+    },
+    {
+      "domain": "happy-horse.art",
+      "websiteId": "web_muqlmlh71UhPb2Gz",
+      "targetId": "tgt_muqlmlh8WEYNvxpx",
+      "firstRunId": "fcf2e7ce-e7ae-4146-98ca-67e5a2e4a1f0",
+      "secondRunId": "746e9edc-793f-4d42-9b04-2b89276da001",
+      "observedUrls": 198,
+      "inventoryCount": 198,
+      "events": 0
+    }
+  ],
+  "observations": [
+    {
+      "id": "42ec9672-b965-4001-a76b-d9471adc82cd",
+      "target_id": "tgt_muqlmd7tJOJozL7V",
+      "trigger": "manual",
+      "scope_version": 1,
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "baseline",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:16.335Z",
+      "created_at": "2026-10-02T06:45:16.335Z",
+      "finished_at": "2026-10-02T06:45:20.595Z",
+      "error": null,
+      "url_count": 1735
+    },
+    {
+      "id": "0b74cce4-39ae-4b2d-af4e-5ae481bc6a07",
+      "target_id": "tgt_muqlmd7tJOJozL7V",
+      "trigger": "manual",
+      "scope_version": 1,
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "applied",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:20.891Z",
+      "created_at": "2026-10-02T06:45:20.891Z",
+      "finished_at": "2026-10-02T06:45:26.220Z",
+      "error": null,
+      "url_count": 1735
+    },
+    {
+      "id": "fcf2e7ce-e7ae-4146-98ca-67e5a2e4a1f0",
+      "target_id": "tgt_muqlmlh8WEYNvxpx",
+      "trigger": "manual",
+      "scope_version": 1,
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "baseline",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:26.991Z",
+      "created_at": "2026-10-02T06:45:26.991Z",
+      "finished_at": "2026-10-02T06:45:34.820Z",
+      "error": null,
+      "url_count": 198
+    },
+    {
+      "id": "746e9edc-793f-4d42-9b04-2b89276da001",
+      "target_id": "tgt_muqlmlh8WEYNvxpx",
+      "trigger": "manual",
+      "scope_version": 1,
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "applied",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:36.044Z",
+      "created_at": "2026-10-02T06:45:36.044Z",
+      "finished_at": "2026-10-02T06:45:40.730Z",
+      "error": null,
+      "url_count": 198
+    },
+    {
+      "id": "acfe3c5e-ed97-4a0d-b916-410c2d25df01",
+      "target_id": "tgt_muqlmd7tJOJozL7V",
+      "trigger": "scheduled",
+      "scope_version": 1,
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "applied",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:45.746Z",
+      "created_at": "2026-10-02T06:45:45.746Z",
+      "finished_at": "2026-10-02T06:45:46.343Z",
+      "error": null,
+      "url_count": 1735
+    },
+    {
+      "id": "2f9e1fca-880b-4fd2-ad30-22ff1b84d144",
+      "target_id": "tgt_muqlmlh8WEYNvxpx",
+      "trigger": "manual",
+      "scope_version": 2,
+      "execution_status": "failed",
+      "completeness": "unusable",
+      "adoption_status": "none",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:46.726Z",
+      "created_at": "2026-10-02T06:45:46.726Z",
+      "finished_at": "2026-10-02T06:45:55.001Z",
+      "error": {
+        "code": "HTTP_404",
+        "message": "Sitemap returned HTTP 404",
+        "retryable": false,
+        "retryAfterMs": 0
+      },
+      "url_count": null
+    },
+    {
+      "id": "ad8cdb64-43f3-4adc-ac87-6f65487b2503",
+      "target_id": "tgt_muqlmlh8WEYNvxpx",
+      "trigger": "manual",
+      "scope_version": 3,
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "adoption_status": "baseline",
+      "attempt": 1,
+      "available_at": "2026-10-02T06:45:55.810Z",
+      "created_at": "2026-10-02T06:45:55.810Z",
+      "finished_at": "2026-10-02T06:46:02.320Z",
+      "error": null,
+      "url_count": 198
+    }
+  ]
+}

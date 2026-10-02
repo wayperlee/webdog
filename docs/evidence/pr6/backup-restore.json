@@ -1,0 +1,165 @@
+{
+  "observedAt": "2026-10-02T06:51:35.254Z",
+  "sourceDatabase": "127.0.0.1:55471/sitemap_radar_pr1",
+  "format": "PostgreSQL 16 custom archive",
+  "exportedSnapshot": true,
+  "tables": [
+    {
+      "schema": "drizzle",
+      "table": "__drizzle_migrations",
+      "rows": 9,
+      "sha256": "c05660ce2b9802e80b9a5a1c53eb82e2bd4fc5953c604d99272089a9dcd9956a"
+    },
+    {
+      "schema": "public",
+      "table": "account",
+      "rows": 25,
+      "sha256": "d1d46bfe0e1873941b8b49244c5e50e607c40051b1ac366d41257ab78276d755"
+    },
+    {
+      "schema": "public",
+      "table": "accountInvite",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "schema": "public",
+      "table": "accountMembership",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "schema": "public",
+      "table": "alert",
+      "rows": 5,
+      "sha256": "307883a7692513a4bccf96e4352f554d28d68568483d3b21b95afd94a4647e28"
+    },
+    {
+      "schema": "public",
+      "table": "candidate_missing_url",
+      "rows": 1131,
+      "sha256": "d3ea9ab659c5a459985714bff7c3abed4712da2c3361f4d54cbad8b49f3a76a3"
+    },
+    {
+      "schema": "public",
+      "table": "crawl_run",
+      "rows": 51,
+      "sha256": "1b78ed5c0019f5b503da3cae4fce1fb033063a0e16c691d53df0e61f5aada9c0"
+    },
+    {
+      "schema": "public",
+      "table": "crawl_run_attempt",
+      "rows": 54,
+      "sha256": "befa562b8a76694ef2e6aef4e85154314cf0c6fdbd2bdf1dd4af14a575376dcb"
+    },
+    {
+      "schema": "public",
+      "table": "crawl_run_source",
+      "rows": 47,
+      "sha256": "a0df3693c4fcdba1de0897f78eb90ffb0e91a5002b672ed1507fff8b17f823af"
+    },
+    {
+      "schema": "public",
+      "table": "notificationDestination",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "schema": "public",
+      "table": "removal_candidate",
+      "rows": 5,
+      "sha256": "b83b16eb14af8ca4a34006cfbb25caf04abe6b21b661cda90579589950c370c3"
+    },
+    {
+      "schema": "public",
+      "table": "session",
+      "rows": 24,
+      "sha256": "e044327b97ec0736b190240306b9017fba21e3ef53f90f6ab42e2c70d13c8d3f"
+    },
+    {
+      "schema": "public",
+      "table": "site_url",
+      "rows": 9178,
+      "sha256": "5f535dfb90fda19d4bb5c2cf43eb6455ff00e043c66db7f8c082f170c4a3e6b5"
+    },
+    {
+      "schema": "public",
+      "table": "sitemap_revision",
+      "rows": 10,
+      "sha256": "c76e6ba35b541854dec92034db1ad9199164719057ea4de1b0058e796a4102ab"
+    },
+    {
+      "schema": "public",
+      "table": "sitemap_source_cache",
+      "rows": 13,
+      "sha256": "038b10aba274feb1c397c6cfe7590cb25648b4c26bbc0b3db3f2d4bf235c3f5c"
+    },
+    {
+      "schema": "public",
+      "table": "snapshot",
+      "rows": 5,
+      "sha256": "4ef3cf586ec72dc15781d986b149ea85cbd556940a4aadd911533de53c354d70"
+    },
+    {
+      "schema": "public",
+      "table": "target",
+      "rows": 22,
+      "sha256": "cf82db8e333dc31ed62b6818bad6a8b1dd3c30b573e9768879270263e721798d"
+    },
+    {
+      "schema": "public",
+      "table": "url_event",
+      "rows": 2121,
+      "sha256": "dacbb460ba52737cac4d81bf47b898fe70cb5ba155e98ebbbae85c7ab8c70ae3"
+    },
+    {
+      "schema": "public",
+      "table": "user",
+      "rows": 25,
+      "sha256": "cb755484ba743e6d262f4d9277b42cd818c983ce58fdb0fdfcb069020aeea6c1"
+    },
+    {
+      "schema": "public",
+      "table": "userNotificationSettings",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "schema": "public",
+      "table": "verification",
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "schema": "public",
+      "table": "website",
+      "rows": 22,
+      "sha256": "74d608a722e54f9b87b794ba73657e2fbce1b7707ce51f870f7ea6f18ec1a30a"
+    }
+  ],
+  "schemaSha256": "1b42e30bc7800df1be2bf6eaaab2ce64dcbdb801c41fc17f9a2c1f9cea82e616",
+  "dataMatches": true,
+  "schemaMatches": true,
+  "schemaNormalization": "Known equivalent pure AND parentheses in crawl_run_attempt_check only",
+  "restoredAttemptConstraintEnforcement": true,
+  "backupSha256": "ea83594d57776ffbc82296805927f1123c5ae48c6e6823acfc7848c3c2c305b3",
+  "backupBytes": 834745,
+  "backupFileMode": "0600",
+  "backupDirectoryMode": "0700",
+  "restoreMs": 315,
+  "totalMs": 4318,
+  "restoredDatabase": "radar_restore_989dee1d42aa40aa8c314b3b6c3d7ee5",
+  "smoke": {
+    "origin": "http://127.0.0.1:61419",
+    "existingAccountLoginAndInventory": true,
+    "signupAndAuthenticatedWrites": true,
+    "realDefaultCrawler": true,
+    "observedUrls": 1735,
+    "baselineEvents": 0,
+    "sourceContainsSmokeAccount": false,
+    "copiedActiveRunsIsolatedInDisposableDb": 0
+  },
+  "restoreDatabaseCleanup": "completed",
+  "backupPathIncluded": false,
+  "productionTouched": false
+}
