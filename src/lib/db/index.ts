@@ -3,6 +3,7 @@ import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { resolveDatabaseUrl } from "./database-url";
 import * as schema from "./schema";
 import { Pool } from "pg";
+import { poolConfig } from "../runtime-config";
 
 type Db = NodePgDatabase<typeof schema>;
 
@@ -19,7 +20,7 @@ function getConnection(): Connection {
   if (globalThis.webdogPgConnection?.pool) return globalThis.webdogPgConnection;
 
   const databaseUrl = resolveDatabaseUrl();
-  const pool = new Pool({ connectionString: databaseUrl, max: 10 });
+  const pool = new Pool({ connectionString: databaseUrl, ...poolConfig() });
   pool.on("error", () => console.error("DB_POOL_ERROR: idle database connection closed"));
   const db = drizzle(pool, { schema });
 

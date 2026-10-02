@@ -1,4 +1,4 @@
-> **Sitemap Radar PR 5 checkpoint** — Forked from `context-dot-dev/webdog` at
+> **Sitemap Radar PR 6b checkpoint** — Forked from `context-dot-dev/webdog` at
 > `426158f543fbaf591f7248f1be62ebfa8b4d695c`. Authentication and website/sitemap-target
 > configuration work without provider keys. Legacy providers, sharing, invitations,
 > notifications, destructive deletes and synchronous checks are disabled. The worker
@@ -12,7 +12,10 @@
 > See [dashboard behavior and local acceptance](docs/pr5-dashboard-ui.md).
 > [PR 6a live/backup acceptance](docs/pr6-live-backup-acceptance.md) verifies real scans,
 > scheduling/recovery and a private, consistent backup restored in an isolated database.
-> Capacity and Production deployment remain pending.
+> [PR 6b capacity/runtime acceptance](docs/pr6-capacity-runtime.md) covers 200k URLs,
+> multi-target queues, container health, automatic restart and graceful shutdown.
+> Use the [runtime runbook](docs/runtime-runbook.md) for separate Web/Worker services.
+> PR review/merge and Production deployment remain pending.
 > On fake-IP networks, set `SITEMAP_DNS_RESOLVER=cloudflare-doh` in the Worker
 > environment and restart it; public-IP, peer and TLS checks remain enabled.
 > See [DNS configuration and live acceptance](docs/network-doh.md).
@@ -139,7 +142,7 @@ Each monitor has its own check interval (fractional hours supported — `0.25` =
 3. The new snapshot is diffed against the previous one. Changes become alerts.
 4. Alerts are stored in the dashboard and dispatched to the monitor's notification destinations, optionally with an AI-generated summary and the page screenshot.
 
-The Next.js app serves the dashboard, auth, and API routes; the worker runs alongside it (a second process locally, one container on Railway).
+The Next.js app serves the dashboard, auth, and API routes; the worker runs as a separate service.
 
 ---
 
@@ -249,16 +252,18 @@ Every destination has a **send test** action in Settings so you can verify wirin
 
 ### Railway (one-click-ish)
 
-The repo ships with a [`railway.json`](./railway.json) that builds the app, runs migrations, and starts the worker and web server in one service:
+For Sitemap Radar, prefer the locally verified [Docker runtime](docs/runtime-runbook.md).
+The repo ships with [`railway.json`](./railway.json) for Web only and
+[`ops/railway-worker.json`](./ops/railway-worker.json) for a separate Worker service:
 
 ```
-npm run db:migrate → npm run worker (background) → next start
+npm run db:migrate → Web service + separate Worker service
 ```
 
-1. Create a Railway project with a **PostgreSQL** service and a service from this repo.
-2. Wire `DATABASE_URL` from the Postgres service, set `CONTEXT_DEV_API_KEY` and `BETTER_AUTH_SECRET`.
+1. Create a Railway project with **PostgreSQL**, Web and Worker services from this repo; use the corresponding configuration file for each.
+2. Wire `DATABASE_URL`, `BETTER_AUTH_SECRET` and the canonical public auth origin into both services; provider keys are not needed for P0.
 3. Enable public networking — auth URLs derive from `RAILWAY_PUBLIC_DOMAIN` automatically.
-4. Health check is served at `/api/health` (readiness-style, verifies Postgres).
+4. Web readiness is served at `/api/health`; configure independent Worker monitoring. Railway deployment has not been verified in this fork.
 
 Publishing it as a Railway template? Follow the checklist in [`railway/template-publish.md`](./railway/template-publish.md).
 
@@ -270,9 +275,10 @@ webdog is a plain Next.js app plus a Node worker — any host that runs Node 20+
 npm ci
 npm run build
 npm run db:migrate
-npm run worker &      # long-running process
-npm run start         # next start
+npm run start         # Web process
 ```
+
+Run `npm run worker` as a separate supervised process, or use compose.runtime.yml.
 
 Set `BETTER_AUTH_URL` (or `NEXT_PUBLIC_APP_URL`) to your public origin and `BETTER_AUTH_SECRET` to a random value.
 

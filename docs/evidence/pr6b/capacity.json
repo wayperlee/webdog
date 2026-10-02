@@ -1,0 +1,58 @@
+{
+  "observedAt": "2026-10-02T07:07:44.408Z",
+  "fixtureTransport": true,
+  "realPublicNetwork": false,
+  "realPostgresAndApplicationPipeline": true,
+  "singleSiteUrls": 200000,
+  "sites": 100,
+  "urlsPerSmallSite": 2000,
+  "workerQueues": 4,
+  "processed": 100,
+  "peakDatabaseConnections": 8,
+  "peakHarnessRssBytes": 558530560,
+  "eventLoopP99Ms": 42,
+  "timings": {
+    "single_200k_baseline": {
+      "ms": 8440
+    },
+    "single_200k_persistent_304": {
+      "ms": 11146
+    },
+    "single_200k_delta_500": {
+      "ms": 14042
+    },
+    "single_200001_rejected": {
+      "ms": 1118
+    },
+    "contains_search_200k": {
+      "ms": 414
+    },
+    "inventoryQuery": {
+      "samples": 20,
+      "concurrency": 4,
+      "p50Ms": 415,
+      "p95Ms": 883,
+      "deepestOffset": 199800
+    },
+    "100_targets_enqueue": {
+      "ms": 244
+    },
+    "100_targets_4_worker_queues": {
+      "ms": 11550
+    },
+    "100_site_summary": {
+      "ms": 693
+    },
+    "100_site_summary_analyzed": {
+      "ms": 505
+    },
+    "databaseBytes": 361413655
+  },
+  "gates": {
+    "attemptMs": 45000,
+    "inventoryQueryP95Ms": 2000,
+    "siteSummaryMs": 3000
+  },
+  "databaseCleanup": "completed",
+  "productionTouched": false
+}

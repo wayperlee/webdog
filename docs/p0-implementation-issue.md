@@ -9,7 +9,7 @@
 - [x] PR 3：持久化任务、execution_status 唯一约束、availableAt、leaseToken、重试及恢复；本地验收见 [pr3-durable-queue.md](pr3-durable-queue.md)。
 - [x] PR 4：scope inventory、逐 URL 缺失证据、Candidate、原子采纳/CAS、引用驱动 GC；本地验收见 [pr4-inventory-candidates.md](pr4-inventory-candidates.md)。
 - [x] PR 5：网站列表、详情 Tabs、筛选、错误恢复、暂停与归档/恢复；本地验收见 [pr5-dashboard-ui.md](pr5-dashboard-ui.md)。
-- [ ] PR 6：部署、备份恢复、容量与真实站点兼容性验收。真实连续检查/调度/恢复及本地完整备份恢复已通过 [PR 6a 验收](pr6-live-backup-acceptance.md)；容量、正式运行配置、合并和线上部署尚未完成。
+- [ ] PR 6：部署、备份恢复、容量与真实站点兼容性验收。真实连续检查/调度/恢复及本地完整备份恢复已通过 [PR 6a 验收](pr6-live-backup-acceptance.md)；容量及 Docker 运行配置通过 [PR 6b 验收](pr6-capacity-runtime.md)。PR 审查合并、正式环境配置与线上部署尚未完成。
 
 完成勾选指代码与本地验证，不代表对应 GitHub PR 已合并或部署。
 

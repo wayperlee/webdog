@@ -4,7 +4,7 @@
     "buildCommand": "npm run build"
   },
   "deploy": {
-    "startCommand": "sh -c \"npm run db:migrate || exit 1; npm run worker & exec ./node_modules/.bin/next start\"",
+    "startCommand": "sh -c \"npm run db:migrate || exit 1; exec node node_modules/next/dist/bin/next start\"",
     "healthcheckPath": "/api/health",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE"
