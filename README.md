@@ -10,6 +10,9 @@
 > Dashboard now includes current URL/24h summaries, URL inventory, changes, runs,
 > Candidates, scope history, path filters, pause/resume and archive/restore.
 > See [dashboard behavior and local acceptance](docs/pr5-dashboard-ui.md).
+> [PR 6a live/backup acceptance](docs/pr6-live-backup-acceptance.md) verifies real scans,
+> scheduling/recovery and a private, consistent backup restored in an isolated database.
+> Capacity and Production deployment remain pending.
 > On fake-IP networks, set `SITEMAP_DNS_RESOLVER=cloudflare-doh` in the Worker
 > environment and restart it; public-IP, peer and TLS checks remain enabled.
 > See [DNS configuration and live acceptance](docs/network-doh.md).

@@ -1,0 +1,36 @@
+{
+  "run": {
+    "id": "a670d8b0-e535-4bb4-8890-2df9821ef525",
+    "execution_status": "succeeded",
+    "completeness": "complete",
+    "adoption_status": "baseline",
+    "attempt": 2,
+    "available_at": "2026-10-02T06:47:03.413Z",
+    "error": null
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "status": "failed",
+      "started_at": "2026-10-02T06:41:57.354Z",
+      "finished_at": "2026-10-02T06:42:03.411Z",
+      "error": {
+        "code": "NETWORK_ERROR",
+        "message": "Sitemap network or TLS connection failed",
+        "retryable": true,
+        "retryAfterMs": 0
+      }
+    },
+    {
+      "attempt": 2,
+      "status": "succeeded",
+      "started_at": "2026-10-02T06:47:07.602Z",
+      "finished_at": "2026-10-02T06:47:09.243Z",
+      "error": null
+    }
+  ],
+  "clientTimedOut": true,
+  "artificialTimeAdjustment": false,
+  "fixtureFetcher": false,
+  "actualBackoffMs": 304191
+}

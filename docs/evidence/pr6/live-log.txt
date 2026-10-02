@@ -1,0 +1,3 @@
+{"phase":"two_live_scans","domain":"supermaker.ai","urls":1735}
+{"phase":"two_live_scans","domain":"happy-horse.art","urls":198}
+{"phase":"complete","checks":["Two real complete manual scans on supermaker.ai and happy-horse.art; zero first-baseline events; unchanged manual cadence","Default daemon created and completed a real scheduled Run, then advanced the fixed 6h cadence","Deliberately invalid real sitemap root failed without contaminating inventory; automatic discovery recovered in scope 3, preserving scope 1 history"]}

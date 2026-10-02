@@ -1,0 +1,15 @@
+{
+  "tool": "ego-browser",
+  "taskSpaceId": 40,
+  "fixtureFetcher": false,
+  "account": "dedicated PR6 acceptance account",
+  "checks": [
+    "List renders supermaker.ai 1,735 URL and happy-horse.art 198 URL",
+    "Happy-horse historical scope 2 shows failed Run with HTTP 404",
+    "Recovered current scope 3 shows 198 URLs and no current scan error",
+    "Historical scope 1 still has 198 URLs",
+    "Supermaker Runs shows three complete Runs including a daemon-scheduled Run"
+  ],
+  "scheduledView": {"rows":3,"errors":[]},
+  "temporaryAuthFileCleanup": "completed"
+}

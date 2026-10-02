@@ -1,0 +1,2 @@
+{"phase":"snapshot_restore_verified","tables":22,"rows":12747,"restoreMs":315}
+{"phase":"complete","tables":22,"backupBytes":834745,"restoredLiveUrls":1735,"restoreDatabaseCleanup":"completed"}
