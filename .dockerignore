@@ -9,3 +9,9 @@ coverage
 *.tsbuildinfo
 docs/evidence
 .runtime
+.wrangler
+**/.wrangler
+.dev.vars*
+**/.dev.vars*
+ops/cloudflare/node_modules
+ops/cloudflare/dist

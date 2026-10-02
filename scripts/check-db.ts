@@ -43,7 +43,7 @@ async function main() {
       `
         select table_name
         from information_schema.tables
-        where table_schema = 'public'
+        where table_schema = current_schema()
           and table_name = any($1::text[])
       `,
       [EXPECTED_TABLES],

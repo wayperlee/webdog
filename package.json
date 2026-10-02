@@ -20,6 +20,8 @@
     "db:down": "docker compose down",
     "db:check": "tsx scripts/check-db.ts",
     "db:migrate": "drizzle-kit migrate",
+    "db:migrate:scoped": "tsx scripts/migrate-scoped.ts",
+    "db:prepare:supabase": "tsx scripts/prepare-supabase.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:reset": "tsx scripts/reset-db.ts && drizzle-kit push",
@@ -31,13 +33,13 @@
     "@ai-sdk/gateway": "^3.0.121",
     "@ai-sdk/openai": "^3.0.67",
     "ai": "^6.0.193",
-    "better-auth": "^1.6.13",
+    "better-auth": "1.6.33",
     "context.dev": "^1.18.0",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.45.2",
     "ipaddr.js": "2.5.0",
-    "next": "^15.5.18",
+    "next": "15.5.27",
     "node-cron": "^4.2.1",
     "pg": "^8.20.0",
     "react": "19.0.0",
@@ -53,8 +55,8 @@
     "@types/react-dom": "19.0.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^15.5.18",
-    "postcss": "^8.5.0",
+    "eslint-config-next": "15.5.27",
+    "postcss": "8.5.28",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"
   },
@@ -63,7 +65,9 @@
       "esbuild": "0.25.12"
     },
     "next": {
-      "postcss": "8.5.10"
-    }
+      "postcss": "8.5.28",
+      "sharp": "0.35.5"
+    },
+    "nanoid@3": "3.3.19"
   }
 }
