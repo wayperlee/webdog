@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-02T09:51:54.725Z",
+  "origin": "http://localhost:31073",
+  "schema": "groups_ui_48173e16fb0f4e2388d333d1e04b347e",
+  "checks": [
+    "Authentication, strict owner isolation, trimmed name conflict",
+    "Real HTTP summary, baselines, paused sites, ranking, keyset pagination and filters",
+    "Bulk rollback, stale membership conflict, cursor invalidation, move/delete preserve crawl facts",
+    "Archived default exclusion, explicit inclusion and restoration"
+  ],
+  "passed": true,
+  "fixture": {
+    "groups": 2,
+    "websites": 3,
+    "addedEvents": 122,
+    "network": "Controlled XML fixture; no external site claim"
+  }
+}

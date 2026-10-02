@@ -3,11 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { normalizeDomain } from "@/lib/domain";
+import { GroupSelect, useGroupChoices } from "./group-controls";
 import { parseWebsiteUrlInput } from "@/lib/website-url-input";
 
-export function AddWebsiteDialog() {
+export function AddWebsiteDialog({
+  defaultGroupId = null,
+}: {
+  defaultGroupId?: string | null;
+}) {
+  const [groupId, setGroupId] = useState<string | null>(defaultGroupId);
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const choices = useGroupChoices(open);
   const [domain, setDomain] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,6 +26,7 @@ export function AddWebsiteDialog() {
 
   function reset() {
     setDomain("");
+    setGroupId(defaultGroupId);
     setError(null);
     setLoading(false);
   }
@@ -34,7 +42,7 @@ export function AddWebsiteDialog() {
     }
 
     setLoading(true);
-    const body = { domain: normalized };
+    const body = { domain: normalized, competitorGroupId: groupId };
 
     try {
       const res = await fetch("/api/websites", {
@@ -144,6 +152,21 @@ export function AddWebsiteDialog() {
                   monitoring is unavailable.
                 </p>
               </div>
+              <div className="mt-4">
+                <GroupSelect
+                  value={groupId}
+                  onChange={setGroupId}
+                  groups={choices.items.filter(
+                    (g) => g.ownerId === choices.ownerId,
+                  )}
+                  disabled={choices.loading}
+                />
+                {choices.error && (
+                  <p className="mt-2 text-sm text-red-700" role="alert">
+                    {choices.error}
+                  </p>
+                )}
+              </div>
               {error && (
                 <p className="mt-4 text-sm text-brand-700" role="alert">
                   {error}
@@ -162,7 +185,17 @@ export function AddWebsiteDialog() {
                 </button>
                 <button
                   type="submit"
-                  disabled={loading || !domain.trim()}
+                  disabled={
+                    loading ||
+                    !domain.trim() ||
+                    choices.loading ||
+                    !!choices.error ||
+                    (!!groupId &&
+                      !choices.items.some(
+                        (g) =>
+                          g.id === groupId && g.ownerId === choices.ownerId,
+                      ))
+                  }
                   className="btn-accent"
                 >
                   {loading ? "Saving…" : "Add website"}

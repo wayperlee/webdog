@@ -10,6 +10,7 @@ import { AccountSwitcher } from "@/components/account-switcher";
 
 const links = [
   { href: "/dashboard", label: "Websites" },
+  { href: "/dashboard/groups", label: "Competitor groups" },
   { href: "/dashboard/settings", label: "Settings" },
 ] as const;
 

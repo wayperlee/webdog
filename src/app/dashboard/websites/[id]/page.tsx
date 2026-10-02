@@ -1,3 +1,4 @@
+import { AssignGroups } from "@/components/group-controls";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
@@ -20,6 +21,13 @@ export default async function WebsiteDetailPage({
     .where(and(eq(schema.website.id, id), websiteOwnerAccessible(user.id)))
     .limit(1);
   if (!website) notFound();
+  const [group] = website.competitorGroupId
+    ? await db
+        .select()
+        .from(schema.competitorGroup)
+        .where(eq(schema.competitorGroup.id, website.competitorGroupId))
+        .limit(1)
+    : [];
   const targets = await db
     .select()
     .from(schema.target)
@@ -36,6 +44,29 @@ export default async function WebsiteDetailPage({
       </Link>
       <h1 className="mt-6 text-3xl font-semibold">{website.name}</h1>
       <p className="mt-2 font-mono text-sm">{website.url}</p>
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+        <span>
+          Group:{" "}
+          {group ? (
+            <Link className="underline" href={`/dashboard/groups/${group.id}`}>
+              {group.name}
+            </Link>
+          ) : (
+            "Ungrouped"
+          )}
+        </span>
+        <AssignGroups
+          buttonText="Change group"
+          defaultGroupId={website.competitorGroupId}
+          websites={[
+            {
+              id: website.id,
+              ownerId: website.userId,
+              competitorGroupId: website.competitorGroupId,
+            },
+          ]}
+        />
+      </div>
       {targets.map((t) => (
         <MonitorDetail key={t.id} targetId={t.id} />
       ))}
