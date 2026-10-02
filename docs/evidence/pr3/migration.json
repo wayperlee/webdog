@@ -1,0 +1,9 @@
+{
+  "target": "local QA sitemap_radar_pr1",
+  "postgresVersion": "16.15",
+  "appliedMigrations": ["0004_gray_pandemic", "0005_absent_thunderbolts"],
+  "tablesVerified": ["crawl_run", "crawl_run_attempt", "crawl_run_source", "sitemap_revision", "sitemap_source_cache"],
+  "activeIndexPredicate": "execution_status = ANY (ARRAY['queued'::text, 'running'::text])",
+  "leftoverTestSchemas": 0,
+  "productionMigration": "NOT RUN"
+}

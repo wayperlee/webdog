@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "anonymous and cross-owner access denied; client lease/config fields rejected",
+    "paused manual Run accepted; 10 concurrent HTTP submissions return 202, one durable Run, zero attempts",
+    "legacy run submission delegates to the same owned queue without HTTP scraping",
+    "native fixture execution persisted; history exposes summary without tokens or full inventory",
+    "archive denies submission; retained snapshot and alert contents unchanged"
+  ],
+  "websiteId": "web_muqhhd1wnuhI4AJ4",
+  "targetId": "tgt_muqhhd1yzvipAR0N",
+  "fixtureUrls": 2,
+  "historicalDigest": "4d7152350079d59015a4fd5ac03e4f8f7a7f22421be99a84e0c0b078b78cf79f"
+}

@@ -1,0 +1,59 @@
+Authenticated local browser: paused monitor -> Run now -> queued/unknown/attempt 0 -> polled succeeded/complete/attempt 1. Native XML fixture has 2 URLs; this is not a live site URL count.
+
+[p1 "webdog.ai: open-source website change monitoring" | space "Sitemap Radar PR3 验收"(31): 1 managed, 0 untracked — p1* "webdog.ai: open-source website change monitoring"]
+root
+  container
+    container
+      container
+        anchor "webdog.ai home" [ref=17, loc=css:a[aria-label="webdog.ai home"], url=http://localhost:31072/dashboard]
+          text "🐶"
+          text "webdog.ai"
+        container "Main"
+          anchor [ref=18, url=http://localhost:31072/dashboard]
+            text "Websites"
+          anchor [ref=19, loc=href:/dashboard/settings, url=http://localhost:31072/dashboard/settings]
+            text "Settings"
+        button "Account menu for PR3 owner" [ref=20, loc=css:button[aria-label="Account menu for PR3 owner"]]
+          text "PO"
+      container
+        anchor [ref=21, url=http://localhost:31072/dashboard]
+          text "Websites"
+        heading
+          text "happy-horse.art"
+        paragraph
+          text "https://happy-horse.art"
+        container
+          heading
+            text "Sitemap monitor"
+          paragraph
+            text "Paused"
+            text "· Every"
+            text "6"
+            text "hours"
+          container
+            button [ref=22]
+              text "Run now"
+            paragraph
+              text "Scans are processed by the background worker. Changes history will be available in the next stage."
+            unordered_list
+              list_item
+                text "succeeded"
+                text "·"
+                text "complete"
+                text "· attempt"
+                text "1"
+                text "·"
+                text "2"
+                text "URLs observed"
+              list_item
+                text "succeeded"
+                text "·"
+                text "complete"
+                text "· attempt"
+                text "1"
+                text "·"
+                text "2"
+                text "URLs observed"
+    anchor "webdog.ai is open source — view the code on GitHub" [ref=23, loc=css:a[aria-label="webdog.ai is open source — view the code on GitHub"], url=https://github.com/context-dot-dev/webdog]
+      svg_root
+      text "Open Source"

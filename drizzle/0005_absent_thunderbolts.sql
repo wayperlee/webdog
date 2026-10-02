@@ -1,0 +1,4 @@
+ALTER TABLE "crawl_run" DROP CONSTRAINT "crawl_run_lease_check";--> statement-breakpoint
+ALTER TABLE "crawl_run" ADD CONSTRAINT "crawl_run_origin_baseline_run_id_crawl_run_id_fk" FOREIGN KEY ("origin_baseline_run_id") REFERENCES "public"."crawl_run"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "target" ADD CONSTRAINT "target_baseline_run_id_crawl_run_id_fk" FOREIGN KEY ("baseline_run_id") REFERENCES "public"."crawl_run"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "crawl_run" ADD CONSTRAINT "crawl_run_lease_check" CHECK (("crawl_run"."execution_status" = 'running' AND "crawl_run"."lease_token" IS NOT NULL AND "crawl_run"."lease_expires_at" IS NOT NULL) OR ("crawl_run"."execution_status" <> 'running' AND "crawl_run"."lease_token" IS NULL AND "crawl_run"."lease_expires_at" IS NULL));

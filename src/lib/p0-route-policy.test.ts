@@ -10,11 +10,11 @@ test("legacy destructive and outbound capabilities are closed", () => {
   }
   assert.equal(p0RouteDecision("/share/existing-token", "GET")?.status, 404);
   assert.equal(p0RouteDecision("/invite/existing-token", "GET")?.status, 404);
-  assert.equal(p0RouteDecision("/api/cron/run", "POST")?.status, 503);
+  assert.equal(p0RouteDecision("/api/cron/run", "GET")?.status, 405);
 });
 
 test("base auth and owned website/target routes remain available", () => {
-  for (const [path, method] of [["/api/auth/sign-up/email", "POST"], ["/api/websites", "POST"], ["/api/websites/w", "GET"], ["/api/targets/t", "PATCH"]]) {
+  for (const [path, method] of [["/api/auth/sign-up/email", "POST"], ["/api/websites", "POST"], ["/api/websites/w", "GET"], ["/api/targets/t", "PATCH"], ["/api/targets/t/runs", "POST"], ["/api/targets/t/runs", "GET"], ["/api/cron/run", "POST"]]) {
     assert.equal(p0RouteDecision(path, method), null);
   }
   assert.equal(p0RouteDecision("/api/future-capability", "POST")?.status, 404);
