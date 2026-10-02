@@ -462,6 +462,37 @@ test(
             ),
             { code: "CURSOR_STALE" },
           );
+          const filtered = await groupEvents(
+            pool,
+            owner,
+            g.id,
+            { ...eventOptions, siteId: w.id },
+            secret,
+          );
+          assert.ok(filtered.nextCursor);
+          await assignWebsites(pool, owner, owner, null, [
+            { websiteId: w.id, expectedGroupId: g.id },
+          ]);
+          await assert.rejects(
+            groupEvents(
+              pool,
+              owner,
+              g.id,
+              { ...eventOptions, siteId: w.id, cursor: filtered.nextCursor! },
+              secret,
+            ),
+            { code: "CURSOR_STALE" },
+          );
+          await assert.rejects(
+            groupEvents(
+              pool,
+              owner,
+              g.id,
+              { ...eventOptions, siteId: w.id },
+              secret,
+            ),
+            { code: "GROUP_NOT_FOUND" },
+          );
         },
       );
     } finally {

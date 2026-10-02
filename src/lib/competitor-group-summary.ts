@@ -262,13 +262,13 @@ export async function groupEvents(
       options.limit + 1,
     ],
   );
-  if (!result.id || !result.siteAllowed)
-    throw new GroupError("GROUP_NOT_FOUND", 404);
+  if (!result.id) throw new GroupError("GROUP_NOT_FOUND", 404);
   const fingerprint = createHash("sha256")
     .update(JSON.stringify([result.version, result.configuration]))
     .digest("hex");
   if (cursor && fingerprint !== cursor.fingerprint)
     throw new GroupError("CURSOR_STALE");
+  if (!result.siteAllowed) throw new GroupError("GROUP_NOT_FOUND", 404);
   const asOf = new Date(result.asOf).toISOString(),
     more = result.items.length > options.limit,
     items = result.items.slice(0, options.limit),
