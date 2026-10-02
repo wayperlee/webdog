@@ -3,11 +3,18 @@ import {
   doublePrecision,
   index,
   integer,
+  jsonb,
+  check,
+  uniqueIndex,
   pgTable,
   primaryKey,
   text,
   timestamp,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import type { CrawlOptions } from "../sitemap";
+import type { CrawlResult, Revision } from "../sitemap/types";
 
 /* ------------------------------------------------------------------ */
 /* BetterAuth core tables — field names follow the BetterAuth defaults. */
@@ -176,10 +183,20 @@ export const target = pgTable(
     /** Optional free-text note of what the user wants to watch for; labels the monitor and focuses AI summaries. */
     watchNote: text("watchNote"),
     enabled: boolean("enabled").notNull().default(true),
-    /** Minimum spacing between successful checks (hours, fractional OK — e.g. 0.25 = 15m); worker wakes per SCRAPE_CRON. */
+    /** Scheduled cadence in hours; P0 API accepts 1/6/12/24 (new monitors default to 6). */
     checkIntervalHours: doublePrecision("checkIntervalHours").notNull().default(1),
-    /** Sole eligibility clock for scheduled runs; advanced by fixed interval after success. Null = due immediately. */
+    /** Fixed scheduled clock, advanced at scheduling; manual/retry never move it. Null = immediately due. */
     nextCheckDueAt: timestamp("nextCheckDueAt", { withTimezone: true, precision: 3 }),
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
+    scopeVersion: integer("scope_version").notNull().default(1),
+    filterVersion: integer("filter_version").notNull().default(1),
+    baselineRunId: text("baseline_run_id").references((): AnyPgColumn => crawlRun.id, { onDelete: "restrict" }),
+    sitemapRoots: jsonb("sitemap_roots").$type<string[]>(),
+    allowedPageHosts: jsonb("allowed_page_hosts").$type<string[]>(),
+    normalizationPolicy: text("normalization_policy").notNull().default("url-v1"),
+    discoveredRoots: jsonb("discovered_roots").$type<string[]>(),
+    liveSources: jsonb("live_sources").$type<string[]>().notNull().default([]),
+    crawlPolicyKey: text("crawl_policy_key"),
     lastCheckedAt: timestamp("lastCheckedAt", { withTimezone: true, precision: 3 }),
     /** Human-readable message from the most recent failed check; null once a check succeeds. */
     lastError: text("lastError"),
@@ -342,3 +359,66 @@ export type AlertKind = Alert["kind"];
 export type TargetKind = Target["kind"];
 export type LinkScope = NonNullable<Target["linkScope"]>;
 export type AiProvider = NonNullable<UserNotificationSettings["aiProvider"]>;
+
+// Durable queue identities survive diagnostic/source retention and future inventory GC.
+export const crawlRun = pgTable("crawl_run", {
+  id: text("id").primaryKey(),
+  targetId: text("target_id").notNull().references(() => target.id, { onDelete: "restrict" }),
+  trigger: text("trigger", { enum: ["manual", "scheduled", "confirmation"] }).notNull(),
+  scopeVersion: integer("scope_version").notNull(),
+  originBaselineRunId: text("origin_baseline_run_id").references((): AnyPgColumn => crawlRun.id, { onDelete: "restrict" }),
+  config: jsonb("config").$type<Pick<CrawlOptions, "siteUrl" | "roots" | "allowedPageHosts">>().notNull(),
+  executionStatus: text("execution_status", { enum: ["queued", "running", "succeeded", "failed", "cancelled"] }).notNull().default("queued"),
+  completeness: text("completeness", { enum: ["unknown", "complete", "partial", "unusable"] }).notNull().default("unknown"),
+  adoptionStatus: text("adoption_status", { enum: ["none", "baseline", "applied", "quarantined", "first_observation", "discarded", "stale"] }).notNull().default("none"),
+  attempt: integer("attempt").notNull().default(0),
+  leaseEpoch: integer("lease_epoch").notNull().default(0),
+  leaseToken: text("lease_token"),
+  workerId: text("worker_id"),
+  leaseExpiresAt: timestamp("lease_expires_at", { withTimezone: true }),
+  heartbeatAt: timestamp("heartbeat_at", { withTimezone: true }),
+  attemptStartedAt: timestamp("attempt_started_at", { withTimezone: true }),
+  availableAt: timestamp("available_at", { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  startedAt: timestamp("started_at", { withTimezone: true }),
+  finishedAt: timestamp("finished_at", { withTimezone: true }),
+  result: jsonb("result").$type<Omit<CrawlResult, "state">>(),
+  error: jsonb("error").$type<{ code: string; message: string; retryable: boolean; retryAfterMs?: number }>(),
+}, (t) => ({
+  oneActive: uniqueIndex("crawl_run_one_active_per_target").on(t.targetId).where(sql`${t.executionStatus} IN ('queued', 'running')`),
+  ready: index("crawl_run_ready_idx").on(t.availableAt, t.createdAt).where(sql`${t.executionStatus} = 'queued'`),
+  expired: index("crawl_run_expired_idx").on(t.leaseExpiresAt).where(sql`${t.executionStatus} = 'running'`),
+  history: index("crawl_run_history_idx").on(t.targetId, t.createdAt),
+  status: check("crawl_run_status_check", sql`${t.executionStatus} IN ('queued','running','succeeded','failed','cancelled')`),
+  completeness: check("crawl_run_completeness_check", sql`${t.completeness} IN ('unknown','complete','partial','unusable')`),
+  adoption: check("crawl_run_adoption_check", sql`${t.adoptionStatus} IN ('none','baseline','applied','quarantined','first_observation','discarded','stale')`),
+  trigger: check("crawl_run_trigger_check", sql`${t.trigger} IN ('manual','scheduled','confirmation')`),
+  lease: check("crawl_run_lease_check", sql`(${t.executionStatus} = 'running' AND ${t.leaseToken} IS NOT NULL AND ${t.leaseExpiresAt} IS NOT NULL) OR (${t.executionStatus} <> 'running' AND ${t.leaseToken} IS NULL AND ${t.leaseExpiresAt} IS NULL)`),
+  attempt: check("crawl_run_attempt_check", sql`${t.attempt} BETWEEN 0 AND 4 AND ${t.leaseEpoch} >= ${t.attempt}`),
+}));
+export const crawlRunAttempt = pgTable("crawl_run_attempt", {
+  runId: text("run_id").notNull().references(() => crawlRun.id, { onDelete: "restrict" }),
+  attempt: integer("attempt").notNull(),
+  leaseToken: text("lease_token").notNull(),
+  startedAt: timestamp("started_at", { withTimezone: true }).notNull(),
+  finishedAt: timestamp("finished_at", { withTimezone: true }),
+  status: text("status").notNull().default("running"),
+  error: jsonb("error"),
+}, (t) => ({ pk: primaryKey({ columns: [t.runId, t.attempt] }), status: check("crawl_attempt_status_check", sql`${t.status} IN ('running','succeeded','failed','lost','discarded')`) }));
+export const sitemapRevision = pgTable("sitemap_revision", {
+  id: text("id").primaryKey(), content: jsonb("content").$type<Revision>().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+export const sitemapSourceCache = pgTable("sitemap_source_cache", {
+  targetId: text("target_id").notNull().references(() => target.id, { onDelete: "restrict" }),
+  scopeVersion: integer("scope_version").notNull(), sourceUrl: text("source_url").notNull(),
+  finalUrl: text("final_url").notNull(), etag: text("etag"), lastModified: text("last_modified"),
+  revisionId: text("revision_id").notNull().references(() => sitemapRevision.id, { onDelete: "restrict" }),
+}, (t) => ({ pk: primaryKey({ columns: [t.targetId, t.scopeVersion, t.sourceUrl] }), revision: index("sitemap_cache_revision_idx").on(t.revisionId) }));
+export const crawlRunSource = pgTable("crawl_run_source", {
+  runId: text("run_id").notNull().references(() => crawlRun.id, { onDelete: "restrict" }),
+  attempt: integer("attempt").notNull(), sourceUrl: text("source_url").notNull(),
+  revisionId: text("revision_id").references(() => sitemapRevision.id, { onDelete: "restrict" }),
+  observation: jsonb("observation").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (t) => ({ pk: primaryKey({ columns: [t.runId, t.attempt, t.sourceUrl] }), revision: index("crawl_source_revision_idx").on(t.revisionId) }));

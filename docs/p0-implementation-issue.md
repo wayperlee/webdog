@@ -6,7 +6,7 @@
 
 - [x] PR 1：本地上游复现、主流程解耦、旧入口收口和基线证据。
 - [x] PR 2：原生安全 fetch、发现、XML/index/gzip、304 缓存、完整来源图；实现与本地验证见 [pr2-native-sitemap.md](pr2-native-sitemap.md)。
-- [ ] PR 3：持久化任务、execution_status 唯一约束、availableAt、leaseToken、重试及恢复。
+- [x] PR 3：持久化任务、execution_status 唯一约束、availableAt、leaseToken、重试及恢复；本地验收见 [pr3-durable-queue.md](pr3-durable-queue.md)。
 - [ ] PR 4：scope inventory、逐 URL 缺失证据、Candidate、原子采纳/CAS、引用驱动 GC。
 - [ ] PR 5：网站列表、详情 Tabs、筛选、错误恢复、暂停与归档/恢复。
 - [ ] PR 6：部署、备份恢复、容量与真实站点兼容性验收。

@@ -16,7 +16,7 @@ export function p0RouteDecision(path: string, method: string): { status: number;
   if (/^\/api\/targets\/[^/]+$/.test(path)) {
     return method === "PATCH" ? null : { status: 405, allow: "PATCH" };
   }
-  // Queue submission replaces this endpoint in PR 3; never fall back to synchronous scraping.
-  if (path === "/api/cron/run") return { status: 503 };
+  if (/^\/api\/targets\/[^/]+\/runs$/.test(path)) return ["POST", "GET", "HEAD"].includes(method) ? null : { status: 405, allow: "GET, HEAD, POST" };
+  if (path === "/api/cron/run") return method === "POST" ? null : { status: 405, allow: "POST" };
   return { status: 404 };
 }

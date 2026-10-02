@@ -1,0 +1,70 @@
+
+> webdog-ai@0.1.0 test
+> tsx --test src/**/*.test.ts
+
+✔ explicit suppress:true is honored and reason is kept (0.860458ms)
+✔ explicit suppress:false surfaces the alert (0.066458ms)
+✔ JSON wrapped in prose or code fences is still parsed (0.067417ms)
+✔ suppress:true with no reason gets a default reason (0.082042ms)
+✔ malformed JSON fails open (0.05675ms)
+✔ no JSON object at all fails open (0.051042ms)
+✔ empty, null, and undefined all fail open (0.0515ms)
+✔ stringified 'true' is not a boolean and must not suppress (0.055792ms)
+✔ truthy non-boolean (1) must not suppress (0.071542ms)
+✔ missing suppress key fails open (0.087ms)
+✔ a JSON array (not an object) fails open (0.054333ms)
+✔ an over-long reason is truncated (0.053ms)
+✔ Retry policy uses the same Run, three frozen backoffs and Retry-After (2.016542ms)
+▶ PostgreSQL durable queue integration
+  ✔ Concurrent enqueue has one Run; database unique index rejects direct duplicates; claim is exclusive (96.857209ms)
+  ✔ Retry stays queued, availableAt gates claim, attempt increments only on claim, old tokens cannot write (81.145375ms)
+  ✔ Permanent resource errors do not retry (22.470292ms)
+  ✔ Expired leases recover once, preserve identity and invalidate old execution (30.612417ms)
+  ✔ Heartbeat lock wait uses fresh DB time, never transaction-start time (535.563042ms)
+  ✔ Final commit after lock wait rejects expired lease and rolls back all cache/result writes (539.896958ms)
+  ✔ Lease extension is capped at the attempt wall-time deadline (24.3685ms)
+  ✔ Scope, archive and baseline changes discard stale work without cache adoption (61.823041ms)
+  ✔ Recovery records attempt wall-time timeout as failed and requeues the same Run (15.970125ms)
+  ✔ Paused allows manual, archived denies it and queued archive cannot be claimed (29.51775ms)
+  ✔ Fixed cadence catches up missed slots; a busy manual slot advances cadence without another Run (21.038958ms)
+  ✔ Constraint failure rolls back revisions, cache, attempt closure and Run update together (31.687625ms)
+  ✔ Checkpoint survives a new queue instance and parent 304 still checks child (29.702083ms)
+  ✔ Graceful shutdown requeues the same attempt without marking a scan complete (15.869875ms)
+  ✔ Complete retirement removes only current cache refs; partial keeps the previous complete graph (48.86425ms)
+  ✔ Failed discovery checkpoint does not persist empty explicit roots on the next Run (27.493167ms)
+  ✔ SIGKILL after actual worker claim leaves durable identity for lease recovery (465.319125ms)
+  ✔ Default native worker rejects an unsafe root and records a permanent failure (17.328583ms)
+✔ PostgreSQL durable queue integration (2347.276708ms)
+✔ legacy destructive and outbound capabilities are closed (1.036708ms)
+✔ base auth and owned website/target routes remain available (0.105333ms)
+✔ Safe HTTP rejects mixed/private DNS answers before connecting, including every redirect hop (24.067083ms)
+✔ Connected private peer is rejected before sending any HTTP request (5.788209ms)
+✔ A different public peer is also rejected; redirected hostname DNS is checked again (3.185208ms)
+✔ DNS pin is reused for connection; conditional headers are sent only to the matching final URL (6.23375ms)
+✔ Retry-After is retained without inline retry; redirect loops and hop caps fail explicitly (5.384167ms)
+✔ Request deadline covers stalled DNS and stalled body; attempt deadline wins across requests (63.594ms)
+✔ XML: namespaces, CDATA, entities, extension metadata and legitimate empty documents (10.88475ms)
+✔ XML: HTML, malformed, DTD, unknown entities, invalid UTF-8 and bad entries are distinct failures (153.824209ms)
+✔ Normalization preserves query order, slash and path case; private and ambiguous host scopes are rejected (7.144084ms)
+✔ Streaming gzip: magic, HTTP encoding, double gzip, split header, corruption and inflation caps (13.392917ms)
+✔ Interrupted gzip network stream remains retryable and differs from corrupt gzip (0.567625ms)
+✔ Source DAG: nested indexes, shared child fetched once, full union and parent graph (1.696791ms)
+✔ 304 index still fetches children; valid leaf 304 restores its revision (1.11875ms)
+✔ Missing/corrupt revision never turns 304 into an empty success (0.480375ms)
+✔ 304 at a different final URL is rejected and corrupt cache is fetched unconditionally (0.79525ms)
+✔ Cached revisions survive arbitrarily old repeated 304 responses (2.763291ms)
+✔ Partial child failure preserves live sources; only complete graph can retire an unreferenced child (1.16125ms)
+✔ A source still referenced by another root is never retired; split movement preserves page union (1.331208ms)
+✔ Discovery reads robots directives and fixes roots; subsequent root failure does not rediscover (1.05225ms)
+✔ Discovery conventional roots: missing fallback okay; a failed candidate blocks a smaller baseline (0.725ms)
+✔ Root and host changes require an explicit new baseline (0.505541ms)
+✔ Cycle, deep/shared paths, file/URL/byte caps all return null rather than a truncated set (1.946125ms)
+✔ Attempt deadline and caller cancellation are bounded; frozen ceilings cannot be raised (11.108458ms)
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2788.717583

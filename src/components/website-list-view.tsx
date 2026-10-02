@@ -201,7 +201,7 @@ function GridView({ websites }: { websites: Website[] }) {
                 aria-hidden
               />
               <span className="absolute right-3 top-3 z-20 inline-flex items-center rounded-full bg-white/90 px-2 py-0.5 text-xs font-medium text-neutral-600 ring-1 ring-neutral-900/10">
-                Checks unavailable
+                View scans
               </span>
             </div>
 
@@ -294,7 +294,7 @@ function ListView({ websites }: { websites: Website[] }) {
             </dl>
 
             <span className="shrink-0 rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600 ring-1 ring-neutral-900/5">
-              Checks unavailable
+              View scans
             </span>
 
             {/* Chevron */}

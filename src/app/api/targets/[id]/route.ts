@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql, type SQL } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { badRequest, notFound, parseJson, requireApiUserWithWriteOwner } from "@/lib/api";
 import { websiteOwnerAccessible } from "@/lib/account-access";
-import { computeNextCheckDueAfterSuccess } from "@/lib/scraper";
 import { monitorLimitError } from "@/lib/account-monitor-limits";
 
 async function loadForWrite(sessionUserId: string, ownerId: string, targetId: string) {
@@ -57,16 +56,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   const updates: {
     enabled?: boolean;
     checkIntervalHours?: number;
-    nextCheckDueAt?: Date | null;
+    nextCheckDueAt?: SQL;
   } = {};
   if (parsed.data.enabled !== undefined) updates.enabled = parsed.data.enabled;
   if (parsed.data.checkIntervalHours !== undefined) {
     updates.checkIntervalHours = parsed.data.checkIntervalHours;
-    const last = owned.target.lastCheckedAt;
-    updates.nextCheckDueAt =
-      last != null
-        ? computeNextCheckDueAfterSuccess(last, parsed.data.checkIntervalHours, Date.now())
-        : null;
+    updates.nextCheckDueAt = sql`clock_timestamp() + ${parsed.data.checkIntervalHours} * interval '1 hour'`;
   }
   await db.update(schema.target).set(updates).where(eq(schema.target.id, id));
   const [updated] = await db.select().from(schema.target).where(eq(schema.target.id, id)).limit(1);

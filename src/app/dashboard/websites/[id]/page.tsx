@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 import { requireUser } from "@/lib/session";
 import { websiteOwnerAccessible } from "@/lib/account-access";
+import { RunControls } from "@/components/run-controls";
 
 export default async function WebsiteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const user = await requireUser();
@@ -23,8 +24,7 @@ export default async function WebsiteDetailPage({ params }: { params: Promise<{ 
       {targets.map((t) => <p key={t.id} className="mt-2 text-sm text-neutral-600">
         {t.enabled ? "Enabled" : "Paused"} · Every {t.checkIntervalHours} hours
       </p>)}
-      <p className="mt-4 text-sm text-neutral-600">Website saved. Sitemap checks are not available yet.</p>
-      <button disabled className="btn-secondary mt-4">Run now unavailable</button>
+      {targets.map((t) => <RunControls key={t.id} targetId={t.id} archived={t.archivedAt !== null} />)}
     </section>
   </div>;
 }
