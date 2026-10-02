@@ -1,3 +1,5 @@
+import { normalizeHttpUrl, normalizedPageHosts } from "./sitemap/urls";
+import { adoptComplete, approveCandidate } from "./url-inventory";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
 import { NORMALIZATION_POLICY, type CrawlResult, type CrawlState } from "./sitemap/types";
@@ -15,15 +17,15 @@ export type RunRow = {
   attempt: number; lease_epoch: number; lease_token: string | null;
   completeness: string; adoption_status: string; available_at: Date; created_at: Date;
   lease_expires_at: Date | null; result: Omit<CrawlResult, "state"> | null;
-  attempt_started_at: Date | null;
+  attempt_started_at: Date | null; observed_at: Date | null;
 };
 type TargetRow = {
-  id: string; kind: string; enabled: boolean; archivedAt: Date | null;
+  id: string; websiteId: string; kind: string; enabled: boolean; archivedAt: Date | null;
   scopeVersion: number; baselineRunId: string | null; checkIntervalHours: number; nextCheckDueAt: Date | null;
   sitemapRoots: string[] | null; allowedPageHosts: string[] | null; normalizationPolicy: string;
   discoveredRoots: string[] | null; liveSources: string[]; crawlPolicyKey: string | null; siteUrl: string;
 };
-const TARGET = `SELECT t.id,t.kind,t.enabled,t.archived_at AS "archivedAt",t.scope_version AS "scopeVersion",
+const TARGET = `SELECT t.id,t."websiteId",t.kind,t.enabled,t.archived_at AS "archivedAt",t.scope_version AS "scopeVersion",
  t.baseline_run_id AS "baselineRunId",t."checkIntervalHours",t."nextCheckDueAt",t.sitemap_roots AS "sitemapRoots",
  t.allowed_page_hosts AS "allowedPageHosts",t.normalization_policy AS "normalizationPolicy",
  t.discovered_roots AS "discoveredRoots",t.live_sources AS "liveSources",t.crawl_policy_key AS "crawlPolicyKey",w.url AS "siteUrl"
@@ -66,17 +68,35 @@ export class CrawlQueue {
       }
       const { rows: [active] } = await client.query<RunRow>("SELECT * FROM crawl_run WHERE target_id=$1 AND execution_status IN ('queued','running')", [targetId]);
       if (active) return { run: active, created: false };
+      let candidateId: string | undefined;
+      if (trigger === "confirmation") {
+        const candidate = (await client.query<{ id: string }>(`SELECT id FROM removal_candidate WHERE target_id=$1 AND scope_version=$2
+          AND status IN ('pending','adopted') AND next_confirmation_at<=clock_timestamp()
+          AND (status='adopted' OR (expires_at>clock_timestamp() AND origin_baseline_run_id IS NOT DISTINCT FROM $3::text))
+          ORDER BY next_confirmation_at,id LIMIT 1 FOR UPDATE`, [targetId, target.scopeVersion, target.baselineRunId])).rows[0];
+        if (!candidate) return null;
+        candidateId = candidate.id;
+      }
       const roots = target.sitemapRoots ?? target.discoveredRoots;
       const config = { siteUrl: target.siteUrl, roots: roots?.length ? roots : undefined, allowedPageHosts: target.allowedPageHosts ?? undefined };
       const { rows: [run] } = await client.query<RunRow>(`INSERT INTO crawl_run(id,target_id,trigger,scope_version,origin_baseline_run_id,config)
         VALUES($1,$2,$3,$4,$5,$6::jsonb) RETURNING *`, [randomUUID(), targetId, trigger, target.scopeVersion, target.baselineRunId, JSON.stringify(config)]);
+      if (candidateId) await client.query(`UPDATE removal_candidate SET confirmation_attempts=confirmation_attempts+1,
+        last_confirmation_run_id=$2,next_confirmation_at=clock_timestamp()+interval '1 hour' WHERE id=$1`, [candidateId, run.id]);
       return { run, created: true };
     });
   }
   async schedule(limit = 100) {
     const { rows } = await this.pool.query<{ id: string }>(`SELECT id FROM target WHERE kind='SITEMAP_LINKS' AND enabled AND archived_at IS NULL
       AND ("nextCheckDueAt" IS NULL OR "nextCheckDueAt"<=clock_timestamp()) ORDER BY "nextCheckDueAt" NULLS FIRST,id LIMIT $1`, [limit]);
+    const confirmation = await this.pool.query<{ id: string }>(`SELECT DISTINCT t.id FROM target t JOIN removal_candidate c ON c.target_id=t.id
+      WHERE t.enabled AND t.archived_at IS NULL AND c.scope_version=t.scope_version AND c.status IN ('pending','adopted')
+      AND c.next_confirmation_at<=clock_timestamp() AND (c.status='adopted' OR c.expires_at>clock_timestamp()) LIMIT $1`, [limit]);
     let created = 0;
+    for (const target of confirmation.rows) {
+      try { if ((await this.enqueueRun(target.id, "confirmation"))?.created) created++; }
+      catch (error) { if (!(error instanceof QueueError && ["TARGET_ARCHIVED", "TARGET_NOT_FOUND"].includes(error.code))) throw error; }
+    }
     for (const target of rows) {
       try { if ((await this.enqueueRun(target.id, "scheduled"))?.created) created++; }
       catch (error) { if (!(error instanceof QueueError && ["TARGET_ARCHIVED", "TARGET_NOT_FOUND", "INVALID_INTERVAL", "SCOPE_CHANGE_REQUIRED"].includes(error.code))) throw error; }
@@ -148,6 +168,8 @@ export class CrawlQueue {
         retryAfterMs: Math.max(0, ...result.issues.map((issue) => issue.retryAfterMs ?? 0)),
       };
       const delay = error ? retryDelay(run.attempt, error) : null;
+      const observedAt = (await client.query<{ now: Date }>("SELECT date_trunc('milliseconds',clock_timestamp()) AS now")).rows[0].now;
+      let adoption = stale ? "stale" : "none";
       if (!stale) {
         // Enforce completeness at the persistence boundary as well as in the crawler.
         const liveSources = result.completeness === "complete" ? state.liveSources : target.liveSources;
@@ -169,12 +191,46 @@ export class CrawlQueue {
           "lastCheckedAt"=CASE WHEN $5 THEN clock_timestamp() ELSE "lastCheckedAt" END,"lastError"=$6,"lastErrorAt"=CASE WHEN $6::text IS NULL THEN NULL ELSE clock_timestamp() END WHERE id=$1`,
           [run.target_id, JSON.stringify(state.roots), JSON.stringify(liveSources), state.policyKey, result.completeness === "complete", error?.message ?? null]);
       }
+      if (!stale && result.completeness === "complete") {
+        if (!result.urls) throw new QueueError("COMPLETE_URLS_MISSING");
+        adoption = await adoptComplete(client, target, run, result.urls, observedAt);
+      }
       await this.closeAttempt(client, run, stale ? "discarded" : error ? "failed" : "succeeded", error);
-      const final = await client.query(`UPDATE crawl_run SET execution_status=$3,completeness=$4,adoption_status=$5,result=$6::jsonb,error=$7::jsonb,
+      const final = await client.query(`UPDATE crawl_run SET execution_status=$3,completeness=$4,adoption_status=$5,result=$6::jsonb,error=$7::jsonb,observed_at=$9,
         available_at=CASE WHEN $8::double precision IS NULL THEN available_at ELSE clock_timestamp()+$8*interval '1 millisecond' END,
         finished_at=CASE WHEN $3='queued' THEN NULL ELSE clock_timestamp() END,lease_token=NULL,lease_expires_at=NULL
-        WHERE id=$1 AND ${LEASE} RETURNING id`, [run.id, run.lease_token, stale ? "cancelled" : error ? delay === null ? "failed" : "queued" : "succeeded", result.completeness, stale ? "stale" : "none", JSON.stringify(report), JSON.stringify(error), delay]);
+        WHERE id=$1 AND ${LEASE} RETURNING id`, [run.id, run.lease_token, stale ? "cancelled" : error ? delay === null ? "failed" : "queued" : "succeeded", result.completeness, adoption, JSON.stringify(report), JSON.stringify(error), delay, observedAt]);
       if (!final.rowCount) throw new QueueError("LEASE_LOST");
+    });
+  }
+  async configureScope(targetId: string, ownerId: string, input: { roots: string[] | null; allowedPageHosts: string[] | null }) {
+    return this.transaction(async (client) => {
+      const target = (await client.query<TargetRow>(`${TARGET} WHERE t.id=$1 AND w."userId"=$2 FOR UPDATE OF t`, [targetId, ownerId])).rows[0];
+      if (!target) throw new QueueError("TARGET_NOT_FOUND");
+      if (target.archivedAt) throw new QueueError("TARGET_ARCHIVED");
+      if (input.roots && (input.roots.length === 0 || input.roots.length > 500)) throw new QueueError("INVALID_ROOTS");
+      if (input.allowedPageHosts && (input.allowedPageHosts.length === 0 || input.allowedPageHosts.length > 100)) throw new QueueError("INVALID_HOSTS");
+      const roots = input.roots ? [...new Set(input.roots.map(normalizeHttpUrl))].sort() : null;
+      const hosts = input.allowedPageHosts ? normalizedPageHosts(new URL(target.siteUrl), input.allowedPageHosts) : null;
+      const oldRoots = target.sitemapRoots ? [...target.sitemapRoots].sort() : null;
+      const oldHosts = target.allowedPageHosts ? [...target.allowedPageHosts].sort() : null;
+      if (JSON.stringify(roots) === JSON.stringify(oldRoots) && JSON.stringify(hosts) === JSON.stringify(oldHosts)) return { scopeVersion: target.scopeVersion, changed: false };
+      const updated = (await client.query<{ scope_version: number }>(`UPDATE target SET sitemap_roots=$2::jsonb,allowed_page_hosts=$3::jsonb,
+        scope_version=scope_version+1,baseline_run_id=NULL,discovered_roots=NULL,live_sources='[]',crawl_policy_key=NULL WHERE id=$1 RETURNING scope_version`,
+        [targetId, roots ? JSON.stringify(roots) : null, hosts ? JSON.stringify(hosts) : null])).rows[0];
+      await client.query(`UPDATE removal_candidate SET status='stale',next_confirmation_at=NULL WHERE target_id=$1 AND status IN ('pending','adopted')`, [targetId]);
+      // A running attempt keeps its lease identity and is discarded by final scope/CAS checks. Queued work is released now.
+      await client.query(`UPDATE crawl_run SET execution_status='cancelled',adoption_status='stale',finished_at=clock_timestamp()
+        WHERE target_id=$1 AND execution_status='queued'`, [targetId]);
+      return { scopeVersion: updated.scope_version, changed: true };
+    });
+  }
+  async approve(targetId: string, candidateId: string, ownerId: string) {
+    return this.transaction(async (client) => {
+      const target = (await client.query<TargetRow>(`${TARGET} WHERE t.id=$1 AND w."userId"=$2 FOR UPDATE OF t`, [targetId, ownerId])).rows[0];
+      if (!target) throw new QueueError("TARGET_NOT_FOUND");
+      if (target.archivedAt) throw new QueueError("TARGET_ARCHIVED");
+      return approveCandidate(client, target, candidateId);
     });
   }
   async fail(run: RunRow, error: RunError) {

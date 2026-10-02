@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { setTimeout as delay } from "node:timers/promises";
 import { getPool } from "../src/lib/db";
 import { CrawlQueue } from "../src/lib/crawl-queue";
+import { collectCrawlGarbage } from "../src/lib/crawl-gc";
 import { executeClaim } from "../src/lib/crawl-worker";
 
 async function main() {
@@ -13,9 +14,11 @@ async function main() {
   const queue = new CrawlQueue(getPool());
   const once = process.argv.includes("--once");
   const workerId = `worker-${randomUUID()}`;
+  let lastGc = 0;
   try {
     do {
       try {
+        if (Date.now() - lastGc >= 3_600_000) { await collectCrawlGarbage(queue.pool); lastGc = Date.now(); }
         const recovered = await queue.recoverExpired();
         const scheduled = await queue.schedule();
         const run = await queue.claim(workerId);

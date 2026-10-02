@@ -1,14 +1,17 @@
-> **Sitemap Radar PR 3 checkpoint** — Forked from `context-dot-dev/webdog` at
+> **Sitemap Radar PR 4 checkpoint** — Forked from `context-dot-dev/webdog` at
 > `426158f543fbaf591f7248f1be62ebfa8b4d695c`. Authentication and website/sitemap-target
 > configuration work without provider keys. Legacy providers, sharing, invitations,
 > notifications, destructive deletes and synchronous checks are disabled. The worker
 > uses the native sitemap engine through a durable PostgreSQL queue. Run now submits
 > asynchronously; `npm run worker` schedules, claims, retries and recovers attempts.
-> Full inventory, URL events and Candidate adoption arrive in PR 4.
+> Complete scans now atomically update scoped URL inventory, full events and removal
+> Candidates. Suspicious results are quarantined; owner approval supplies first evidence.
+> Worker confirmation and reference-aware GC preserve the frozen adoption contract.
+> Dashboard inventory/history/filter UI arrives in PR 5.
 >
 > Read [frozen P0 contract](docs/p0-contract-v1.md), [PR 1 scope/evidence](docs/pr1-foundation.md)
 > [native engine](docs/pr2-native-sitemap.md), [queue operations/evidence](docs/pr3-durable-queue.md)
-> and [implementation issue](docs/p0-implementation-issue.md). The original upstream
+> [inventory/adoption/GC](docs/pr4-inventory-candidates.md) and [implementation issue](docs/p0-implementation-issue.md). The original upstream
 > README follows for attribution; its monitoring/deployment instructions do not describe
 > this intermediate checkpoint.
 

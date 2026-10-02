@@ -1,0 +1,6 @@
+
+> webdog-ai@0.1.0 db:check
+> tsx scripts/check-db.ts
+
+Connected to postgres://postgres@127.0.0.1:55471/sitemap_radar_pr1
+Database sitemap_radar_pr1 as postgres; PostgreSQL 16.15; 21 expected tables present.
