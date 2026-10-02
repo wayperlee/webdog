@@ -2,7 +2,7 @@
 
 目标域名 `sitemap.lipeiwei.com`，Cloudflare 账号 `b54b5ffc6bfe3178cf2e09d1bce9ab75`。
 Supabase 组织 `pixsucmvxarljcxvunpq`，用户已创建项目 `common`（`ownplpujolitkipihvlr`），新加坡 / Free。
-这些是资源标识，不是凭据。数据库已建立：9 个迁移、22 张私有表，全部启用 RLS；应用角色与 TLS 已验证。
+这些是资源标识，不是凭据。数据库当前有 10 个迁移、23 张私有表，全部启用 RLS；应用角色与 TLS 已验证。
 Worker、两个容器应用、custom domain 和每分钟 Cron 已发布，云上功能验收记录单独保存。
 
 ## 代码与工具
@@ -42,7 +42,7 @@ NODE_EXTRA_CA_CERTS=ops/cloudflare/certs/supabase-prod-ca-2021.crt npm run db:pr
   --output /absolute/private/runtime.env
 ```
 
-脚本会初始化 schema 默认权限、在私有 schema 内执行既有九个 Drizzle 迁移、创建专用 `sitemap_radar_app` 登录角色，
+脚本会初始化 schema 默认权限、在私有 schema 内执行仓库当前的 Drizzle 迁移、创建专用 `sitemap_radar_app` 登录角色，
 授予业务 DML 权限并启用 RLS。RLS 仅允许服务端专用角色；账号和网站的所有权继续由现有 API 鉴权执行。
 应用角色没有 schema CREATE 权限、没有超级用户或 BYPASSRLS 权限，也不能修改迁移记录。
 
@@ -90,6 +90,39 @@ Candidate 操作、数据库 TLS 和角色权限、backup/restore、云上容量
 尚未完成：长期 Cron 保活观察、云上故障注入、真实远端容量压测，以及云上 partial/Candidate 的完整场景。这些行为已有本地测试，不能据此宣称云上容量或全部故障场景已验收。新生产数据库不自动迁移本地账号和网站。
 
 回退应用用已验证的旧镜像/Worker 版本，保持数据库迁移向前兼容；不要以删项目、drop schema 或重建数据库作为应用回退。
+
+## 竞品分组正式发布记录（2026-10-02）
+
+[生产验收证据](acceptance/competitor-groups/production.json)与[功能说明](competitor-groups.md)记录本次已执行的范围。
+应用源代码为 `a99447ccfe7dedc62310cb865c656f3b8021aa77`；当前 Worker 为
+`1a63b773-e10e-470f-bcbd-4db984056c72`，流量 100%。Web 与 Crawler 完整 rollout 已完成，
+两者镜像 digest 均为 `sha256:401b925a4f455c64c96124d0a68dc86d7ca5c1ff013e74d8c01f1e8a9a147058`。
+后续文档提交不改变这一已部署应用版本。
+
+既有部署已经执行 Drizzle 0009 与独立权限迁移
+`supabase/migrations/20261002094037_competitor_groups_access.sql`，不可盲目重复创建同名 policy。
+迁移记录 9 → 10，表数 22 → 23；新表 RLS、app CRUD、跨 owner 外键与非应用角色隔离均通过。
+迁移前抓取事实 hash 保持一致。Data API 本次在项目控制台确认仍为 disabled，客户端 TLS 证书校验通过。
+迁移前 22 表和发布后 23 表备份均恢复到隔离的本地 PostgreSQL 17，数据与结构、RLS、权限比对通过，
+应用角色真实读写通过；没有在生产数据库执行恢复。
+
+发布时修复了一个启动阻塞：production prune 删除 TypeScript 后，Next.js 加载 `next.config.ts`
+尝试联网安装编译器。配置改为 `next.config.mjs`，行为保持一致；实际 amd64 精简镜像在无网络、
+无 TypeScript 条件下可响应。后续发布不要重新引入启动时必须安装的编译器依赖。
+最终 Worker 已去除临时容器诊断，错误日志隐藏凭据和 URL。
+
+认证后的生产 health 和 groups API 为 200。真实浏览器通过分组创建、备注修改、批量归组、
+预选分组建站、暂停/归档统计；跨账号为 404，旧成员状态冲突为 409。
+短时间离开应用页面时，后台 scheduled Run succeeded/complete；恢复既有 QA 站点后，
+手动 Run 也 succeeded/complete，分别观察到 1,735 URLs。两条监控记录均是 supermaker.ai，
+汇总 3,470 不表示两个不同站点的规模验收。QA 已暂停或归档，旧记录与库存保留。
+
+本机 Docker 虚拟机空间不足曾导致备份恢复启动失败及本地 PostgreSQL 暂时不可写。
+已仅清理本项目未使用的旧镜像引用和精确匹配的可回收 runtime 缓存，保留当前镜像与全部数据库卷，
+本地 localhost:31072 health 恢复 200。备份恢复使用网络隔离的 tmpfs 临时数据库并在结束后销毁。
+
+长期保活、云上故障注入/恢复、生产大规模压测及完整 partial/Candidate 场景仍为 NOT RUN。
+本次短期 Cron 与真实小规模扫描证据不替代这些场景。
 
 ## 官方参考
 

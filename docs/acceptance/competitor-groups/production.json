@@ -1,0 +1,248 @@
+{
+  "recordedAt": "2026-10-02T11:01:11.743607+00:00",
+  "environment": "Production",
+  "origin": "https://sitemap.lipeiwei.com",
+  "feature": "Competitor groups (website grouping; existing account ownership)",
+  "release": {
+    "applicationGit": "a99447ccfe7dedc62310cb865c656f3b8021aa77",
+    "workerVersion": "1a63b773-e10e-470f-bcbd-4db984056c72",
+    "workerTrafficPercentage": 100,
+    "containers": [
+      {
+        "name": "sitemap-radar-radarweb",
+        "imageDigest": "sha256:401b925a4f455c64c96124d0a68dc86d7ca5c1ff013e74d8c01f1e8a9a147058",
+        "rolloutStatus": "completed",
+        "targetVersionPercentage": 100
+      },
+      {
+        "name": "sitemap-radar-radarcrawler",
+        "imageDigest": "sha256:401b925a4f455c64c96124d0a68dc86d7ca5c1ff013e74d8c01f1e8a9a147058",
+        "rolloutStatus": "completed",
+        "targetVersionPercentage": 100
+      }
+    ],
+    "cron": "* * * * *",
+    "mergedPullRequests": [
+      9,
+      10,
+      11,
+      12,
+      13
+    ]
+  },
+  "database": {
+    "projectName": "common",
+    "schema": "sitemap_radar",
+    "migrationCount": 10,
+    "tableCount": 23,
+    "newGroupTableRlsEnabled": true,
+    "compositeMembershipFkCount": 1,
+    "initialAssignedWebsites": 0,
+    "applicationRoleCrudRollbackVerified": true,
+    "crawlFactsUnchangedDuringMigration": true,
+    "privileges": [
+      {
+        "rolname": "anon",
+        "schema_usage": false,
+        "can_select": false,
+        "can_insert": false
+      },
+      {
+        "rolname": "authenticated",
+        "schema_usage": false,
+        "can_select": false,
+        "can_insert": false
+      },
+      {
+        "rolname": "service_role",
+        "schema_usage": false,
+        "can_select": false,
+        "can_insert": false
+      },
+      {
+        "rolname": "sitemap_radar_app",
+        "schema_usage": true,
+        "can_select": true,
+        "can_insert": true
+      }
+    ],
+    "clientTls": {
+      "admin": {
+        "encrypted": true,
+        "certificateAuthorized": true
+      },
+      "app": {
+        "encrypted": true,
+        "certificateAuthorized": true
+      }
+    },
+    "applicationRoleCanCreateSchemaObjects": false,
+    "applicationRoleBypassesRls": false,
+    "dataApiObservedDisabled": true
+  },
+  "backupRestore": [
+    {
+      "observedAt": "2026-10-02T10:10:18.141Z",
+      "phase": "before",
+      "tables": 22,
+      "allDataHashesMatch": true,
+      "allSchemaDefinitionsPoliciesAndGrantsMatch": true,
+      "restoredApplicationRoleVerified": true,
+      "privateDumpBytes": 323884,
+      "privateDumpSha256": "6e5cea4f3e87eb4b9df58925b83b274a60bdc12f7ef9ae83c282edaf38186537",
+      "backupMode": "0600",
+      "restoreTarget": "isolated local PostgreSQL 17; no published port",
+      "productionRestoreExecuted": false
+    },
+    {
+      "observedAt": "2026-10-02T10:58:05.822Z",
+      "phase": "after",
+      "tables": 23,
+      "allDataHashesMatch": true,
+      "allSchemaDefinitionsPoliciesAndGrantsMatch": true,
+      "restoredApplicationRoleVerified": true,
+      "privateDumpBytes": 437092,
+      "privateDumpSha256": "b6619b3d51ab5523b79c7609cff5a55ff805fc8b2515f1dc122396140240383a",
+      "backupMode": "0600",
+      "restoreTarget": "isolated local PostgreSQL 17 on 512 MiB tmpfs; network none; no published port",
+      "productionRestoreExecuted": false
+    }
+  ],
+  "runtimeVerification": {
+    "health": {
+      "observedAt": "2026-10-02T10:59:16.865Z",
+      "authenticatedHealthStatus": 200,
+      "groupsOverviewStatus": 200,
+      "temporaryDiagnosticRemoved": true,
+      "originalLocalHealthStatus": 200,
+      "originalLocalHealthBody": {
+        "ok": true
+      },
+      "originalLocalHealthRecheckedAt": "2026-10-02T11:00:37.021Z"
+    },
+    "offlinePrunedImageSmoke": {
+      "observedAt": "2026-10-02T10:37:35.475Z",
+      "platform": "linux/amd64",
+      "network": "none",
+      "productionDependenciesOnly": true,
+      "typescriptAbsent": true,
+      "serverResponded": true,
+      "status": 503,
+      "elapsedMs": 7792,
+      "note": "Expected readiness 503 because the fixture database does not exist; server starts offline without installing TypeScript."
+    },
+    "localDiskRecovery": {
+      "observedAt": "2026-10-02T11:00:37.022Z",
+      "reason": "Docker VM disk full prevented existing local PostgreSQL writes",
+      "scope": "unused sitemap-radar image references and 12 exact, reclaimable, unshared radar runtime cache records",
+      "reclaimedCacheBytesApprox": 3750704000,
+      "currentImagePreserved": true,
+      "databaseVolumesDeleted": false,
+      "otherProjectImagesOrCachesDeleted": false,
+      "productionResourcesChanged": false,
+      "dockerVmAvailableAfter": "2.8 GiB",
+      "localHealthStatus": 200
+    }
+  },
+  "functionalVerification": {
+    "browser": "Authenticated production desktop and 390px mobile acceptance",
+    "createdAndEditedGroup": true,
+    "assignedWebsiteViaBulkDialog": true,
+    "addedWebsiteWithGroupPreselected": true,
+    "pausedSiteIncluded": true,
+    "archivedSiteExcludedByDefault": true,
+    "archivedSiteIncludedWhenRequested": true,
+    "crossAccountGroupReadAndMembershipWriteStatus": 404,
+    "staleMembershipStatus": 409,
+    "staleMembershipError": "GROUP_ASSIGNMENT_CHANGED",
+    "baselineEventsEmpty": true,
+    "fixtureWebsiteRecords": 2,
+    "fixtureDistinctDomains": 1,
+    "fixtureDomain": "supermaker.ai",
+    "fixtureCurrentUrlCount": 3470,
+    "fixtureNote": "Two monitor records of the same public domain, 1735 URLs per record; not two distinct competitors.",
+    "overviewTimesMs": [
+      1096,
+      1041,
+      1027
+    ],
+    "overviewWindows": [
+      "24h",
+      "7d"
+    ],
+    "mobileViewportWidth": 390,
+    "mobileDocumentWidth": 390,
+    "oldQaRunHistoryRetained": true,
+    "otherOwnerWebsiteMetadataHashUnchanged": true
+  },
+  "backgroundVerification": {
+    "browserAwayStartedAt": "2026-10-02T10:44:14.890Z",
+    "browserAwayEndedAt": "2026-10-02T10:45:29.593Z",
+    "scheduledRun": {
+      "id": "f8a30715-6ad1-48fc-bc0d-d134ab948c7d",
+      "trigger": "scheduled",
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "attempt": 1,
+      "started_at": "2026-10-02T10:44:16.193Z",
+      "observed_at": "2026-10-02T10:44:17.522Z",
+      "finished_at": "2026-10-02T10:44:18.134Z"
+    },
+    "manualRun": {
+      "id": "68f612d5-1c5b-43d1-a41a-e0890d99ee23",
+      "trigger": "manual",
+      "execution_status": "succeeded",
+      "completeness": "complete",
+      "attempt": 1,
+      "started_at": "2026-10-02T10:46:40.524Z",
+      "observed_at": "2026-10-02T10:46:41.042Z",
+      "finished_at": "2026-10-02T10:46:41.985Z"
+    },
+    "cronObservation": {
+      "window": "Browser QA Page was away from the app; short observation only",
+      "events": [
+        {
+          "scriptVersion": "1a63b773-e10e-470f-bcbd-4db984056c72",
+          "outcome": "ok",
+          "cron": "* * * * *",
+          "scheduledTime": 1790937906000,
+          "eventTimestamp": 1790937906893,
+          "exceptions": []
+        }
+      ]
+    },
+    "limit": "Short observation with QA browser away; does not prove long-term liveness or cold-start/fault recovery."
+  },
+  "qaCleanup": {
+    "observedAt": "2026-10-02T10:50:01.868Z",
+    "originalQaPausedAndUngrouped": true,
+    "newQaSiteArchivedAndPaused": true,
+    "archivedExcludedByDefault": true,
+    "archivedIncludedWhenRequested": true,
+    "qaGroupRetainedForRestoredReadWriteEvidence": true,
+    "remainingMemberCount": 1
+  },
+  "validationScope": {
+    "featureLocalTestsBeforeStartupFix": {
+      "passed": 111,
+      "failed": 0,
+      "skipped": 0
+    },
+    "runtimeTestsAfterStartupFix": {
+      "passed": 5,
+      "failed": 0
+    },
+    "fullSuiteRerunAfterStartupFix": false,
+    "applicationAndWorkerTypecheck": "passed",
+    "lint": "passed with 8 pre-existing warnings",
+    "applicationBuild": "passed",
+    "githubCi": "No configured workflows or checks; local evidence only."
+  },
+  "notRun": [
+    "Long-term Cron liveness observation",
+    "Cloud container/process fault injection and same-Run retry recovery",
+    "Production remote capacity/load acceptance at the local 200000-event fixture scale",
+    "Full cloud partial-sitemap and Candidate scenarios",
+    "Production restore (both backups restored only into isolated local PostgreSQL)"
+  ]
+}
