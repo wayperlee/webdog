@@ -1,6 +1,6 @@
-import type { NextConfig } from "next";
+/** @type {import("next").NextConfig} */
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   outputFileTracingRoot: process.cwd(),
   /** External on the server avoids missing `vendor-chunks/better-auth.js` and related webpack chunk bugs. */

@@ -25,7 +25,7 @@
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:reset": "tsx scripts/reset-db.ts && drizzle-kit push",
-    "lint": "eslint src scripts drizzle.config.ts next.config.ts tailwind.config.ts eslint.config.mjs",
+    "lint": "eslint src scripts drizzle.config.ts next.config.mjs tailwind.config.ts eslint.config.mjs",
     "sitemap:scan": "tsx scripts/sitemap-scan.ts",
     "sitemap:compatibility": "tsx scripts/sitemap-compatibility.ts"
   },

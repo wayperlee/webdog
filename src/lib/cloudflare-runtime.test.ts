@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { RuntimeController, containerEnvironment, type ContainerRuntime, type RuntimeEnv } from "../../ops/cloudflare/src/runtime";
+import { RuntimeController, containerEnvironment, runtimeErrorReason, type ContainerRuntime, type RuntimeEnv } from "../../ops/cloudflare/src/runtime";
 
 const env: RuntimeEnv = { RADAR_ENABLED: "true", DATABASE_URL: "postgresql://radar:private@database.example/radar?sslmode=verify-full",
   BETTER_AUTH_SECRET: "a".repeat(40), BETTER_AUTH_URL: "https://sitemap.lipeiwei.com", SITEMAP_DNS_RESOLVER: "cloudflare-doh" };
@@ -69,4 +69,12 @@ test("A failed POST is forwarded once and never replayed", async () => {
   assert.equal(forwarded.headers.get("Cookie"), "session=test");
   assert.equal(forwarded.headers.get("Origin"), "https://sitemap.lipeiwei.com");
   assert.equal(await forwarded.text(), "{}");
+});
+
+test("Runtime diagnostics redact credentials and URLs", () => {
+  const reason = runtimeErrorReason(new Error(`${env.DATABASE_URL} ${env.BETTER_AUTH_SECRET} https://example.com/?token=secret`), env);
+  assert.equal(reason.includes("private"), false);
+  assert.equal(reason.includes(env.BETTER_AUTH_SECRET!), false);
+  assert.equal(reason.includes("token=secret"), false);
+  assert.equal(runtimeErrorReason(new Error("CONTAINER_NOT_READY"), env), "Error: CONTAINER_NOT_READY");
 });

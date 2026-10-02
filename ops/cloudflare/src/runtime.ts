@@ -142,3 +142,13 @@ export class RuntimeController {
     return this.container.getTcpPort(3000).fetch(forwarded);
   }
 }
+
+/** Keep bridge diagnostics useful without logging credentials or request data. */
+export function runtimeErrorReason(error: unknown, env: RuntimeEnv): string {
+  let reason = error instanceof Error ? `${error.name}: ${error.message}` : "Unknown runtime failure";
+  for (const secret of [env.DATABASE_URL, env.BETTER_AUTH_SECRET]) {
+    if (secret) reason = reason.replaceAll(secret, "[redacted]");
+  }
+  reason = reason.replace(/\b(?:postgres(?:ql)?|https?):\/\/[^\s]+/gi, "[url]");
+  return reason.slice(0, 240);
+}

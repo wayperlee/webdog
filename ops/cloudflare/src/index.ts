@@ -1,5 +1,5 @@
 import { DurableObject } from "cloudflare:workers";
-import { RuntimeController, containerEnvironment, serviceUnavailable, type RuntimeEnv } from "./runtime";
+import { RuntimeController, containerEnvironment, serviceUnavailable, runtimeErrorReason, type RuntimeEnv } from "./runtime";
 
 interface Env extends RuntimeEnv {
   RADAR_WEB: DurableObjectNamespace<RadarWeb>;
@@ -52,8 +52,8 @@ export default {
       return serviceUnavailable("INVALID_ORIGIN", 421);
     }
     try { return await env.RADAR_WEB.getByName("web").fetch(request); }
-    catch {
-      console.error(JSON.stringify({ event: "web_unavailable" }));
+    catch (error) {
+      console.error(JSON.stringify({ event: "web_unavailable", reason: runtimeErrorReason(error, env) }));
       return serviceUnavailable("SERVICE_UNAVAILABLE", 502);
     }
   },
