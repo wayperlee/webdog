@@ -6,7 +6,7 @@
    - Environments: .env
 
    Creating an optimized production build ...
- ✓ Compiled successfully in 2.1s
+ ✓ Compiled successfully in 2.4s
    Linting and checking validity of types ...
 
 ./src/components/animated-notif-list.tsx
@@ -75,7 +75,7 @@ Route (app)                                                Size  First Load JS
 ├ ƒ /dashboard                                          3.77 kB         110 kB
 ├ ƒ /dashboard/alerts                                     221 B         103 kB
 ├ ƒ /dashboard/settings                                   221 B         103 kB
-├ ƒ /dashboard/websites/[id]                            6.75 kB         113 kB
+├ ƒ /dashboard/websites/[id]                            6.76 kB         113 kB
 ├ ○ /icon.svg                                               0 B            0 B
 ├ ƒ /invite/[token]                                     1.22 kB         107 kB
 ├ ƒ /onboarding/context-dev                               221 B         103 kB

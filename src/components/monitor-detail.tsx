@@ -424,7 +424,7 @@ export function MonitorDetail({ targetId }: { targetId: string }) {
                 )}
                 {["urls", "events"].includes(tab) && (
                   <form
-                    className="flex w-full flex-wrap gap-2 sm:w-auto"
+                    className="flex w-full gap-2 sm:w-auto"
                     onSubmit={(e) => {
                       e.preventDefault();
                       setQuery(draft.trim());
@@ -433,7 +433,7 @@ export function MonitorDetail({ targetId }: { targetId: string }) {
                   >
                     <input
                       aria-label="Search URLs"
-                      className="input max-w-xs"
+                      className="input min-w-0 max-w-xs"
                       placeholder="Search URL"
                       value={draft}
                       onChange={(e) => setDraft(e.target.value)}
