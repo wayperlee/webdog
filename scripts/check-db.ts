@@ -18,6 +18,8 @@ const EXPECTED_TABLES = [
   "userNotificationSettings",
   "verification",
   "website",
+  "crawl_run", "crawl_run_attempt", "crawl_run_source", "sitemap_revision", "sitemap_source_cache",
+  "site_url", "url_event", "removal_candidate", "candidate_missing_url",
 ] as const;
 
 function redactedDatabaseLabel(databaseUrl: string): string {
@@ -52,7 +54,7 @@ async function main() {
 
     if (missing.length > 0) {
       throw new Error(
-        `Database is reachable but schema is incomplete. Missing tables: ${missing.join(", ")}. Run npm run db:push.`,
+        `Database is reachable but schema is incomplete. Missing tables: ${missing.join(", ")}. Run npm run db:migrate.`,
       );
     }
 

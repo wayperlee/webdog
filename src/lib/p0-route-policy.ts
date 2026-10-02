@@ -17,6 +17,9 @@ export function p0RouteDecision(path: string, method: string): { status: number;
     return method === "PATCH" ? null : { status: 405, allow: "PATCH" };
   }
   if (/^\/api\/targets\/[^/]+\/runs$/.test(path)) return ["POST", "GET", "HEAD"].includes(method) ? null : { status: 405, allow: "GET, HEAD, POST" };
+  if (/^\/api\/targets\/[^/]+\/(urls|events|candidates)$/.test(path)) return ["GET", "HEAD"].includes(method) ? null : { status: 405, allow: "GET, HEAD" };
+  if (/^\/api\/targets\/[^/]+\/candidates\/[^/]+\/urls$/.test(path)) return ["GET", "HEAD"].includes(method) ? null : { status: 405, allow: "GET, HEAD" };
+  if (/^\/api\/targets\/[^/]+\/candidates\/[^/]+\/approve$/.test(path)) return method === "POST" ? null : { status: 405, allow: "POST" };
   if (path === "/api/cron/run") return method === "POST" ? null : { status: 405, allow: "POST" };
   return { status: 404 };
 }

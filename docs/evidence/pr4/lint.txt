@@ -1,0 +1,27 @@
+
+> webdog-ai@0.1.0 lint
+> eslint src scripts drizzle.config.ts next.config.ts tailwind.config.ts eslint.config.mjs
+
+
+/Users/lipeiwei/Documents/code/ai-saas/sitemap-radar/src/components/animated-notif-list.tsx
+  71:13  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/code/ai-saas/sitemap-radar/src/components/monitor-card.tsx
+  524:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/code/ai-saas/sitemap-radar/src/components/public-monitor-card.tsx
+  106:16  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/code/ai-saas/sitemap-radar/src/components/system-services-settings.tsx
+  18:20  warning  '_key' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/lipeiwei/Documents/code/ai-saas/sitemap-radar/src/legacy/upstream-landing.tsx
+   96:14  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+  281:22  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+  376:10  warning  Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element')
+
+/Users/lipeiwei/Documents/code/ai-saas/sitemap-radar/src/lib/context-client.ts
+  8:10  warning  'normalizeDomain' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 8 problems (0 errors, 8 warnings)
+  0 errors and 6 warnings potentially fixable with the `--fix` option.

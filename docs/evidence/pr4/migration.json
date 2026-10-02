@@ -1,0 +1,10 @@
+{
+  "database": "127.0.0.1:55471/sitemap_radar_pr1",
+  "migrationCount": 8,
+  "publicTables": 21,
+  "addedMigrations": [
+    "0006_polite_lightspeed",
+    "0007_broad_smiling_tiger"
+  ],
+  "productionTouched": false
+}

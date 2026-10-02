@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "new read endpoints deny anonymous/cross-owner access and bound page size",
+    "first baseline has zero events; all 500 Added events survive HTTP pagination",
+    "quarantine leaves active inventory untouched; Candidate detail is complete; owner Approve adopts first evidence only and is idempotent",
+    "mixed recovery resolves at URL level: 2 recovered + 500 removed, terminal Candidate confirmed",
+    "expired Candidate returns 409; upstream snapshot/alert content unchanged"
+  ],
+  "websiteId": "web_muqi99b6s20HcafM",
+  "targetId": "tgt_muqi99b7iBbuivYH",
+  "fixture": true,
+  "historicalDigest": "4d7152350079d59015a4fd5ac03e4f8f7a7f22421be99a84e0c0b078b78cf79f"
+}

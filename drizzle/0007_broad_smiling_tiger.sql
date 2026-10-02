@@ -1,0 +1,5 @@
+CREATE UNIQUE INDEX "candidate_run_once_idx" ON "removal_candidate" USING btree ("candidate_run_id");--> statement-breakpoint
+CREATE INDEX "candidate_history_idx" ON "removal_candidate" USING btree ("target_id","scope_version","observed_at","id");--> statement-breakpoint
+CREATE INDEX "candidate_active_origin_idx" ON "removal_candidate" USING btree ("origin_baseline_run_id") WHERE "removal_candidate"."status" IN ('pending','adopted');--> statement-breakpoint
+CREATE INDEX "candidate_active_run_idx" ON "removal_candidate" USING btree ("candidate_run_id") WHERE "removal_candidate"."status" IN ('pending','adopted');--> statement-breakpoint
+CREATE INDEX "candidate_active_confirmation_idx" ON "removal_candidate" USING btree ("last_confirmation_run_id") WHERE "removal_candidate"."status" IN ('pending','adopted');

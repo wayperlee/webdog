@@ -67,7 +67,7 @@ test("PostgreSQL durable queue integration", { skip: process.env.PR3_QUEUE_ACCEP
       await queue.finish(claims[0]!, await result());
       assert.equal((await row(claims[0]!.id)).execution_status, "succeeded");
       assert.equal((await pool.query("SELECT count(*)::int AS n FROM crawl_run_source WHERE run_id=$1", [claims[0]!.id])).rows[0].n, 1);
-      assert.equal((await pool.query("SELECT baseline_run_id FROM target WHERE id=$1", [id])).rows[0].baseline_run_id, null);
+      assert.equal((await pool.query("SELECT baseline_run_id FROM target WHERE id=$1", [id])).rows[0].baseline_run_id, claims[0]!.id);
     });
     await suite.test("Retry stays queued, availableAt gates claim, attempt increments only on claim, old tokens cannot write", async () => {
       const id = await target(); const initialDue = (await pool.query('SELECT "nextCheckDueAt" FROM target WHERE id=$1', [id])).rows[0].nextCheckDueAt;
@@ -133,7 +133,7 @@ test("PostgreSQL durable queue integration", { skip: process.env.PR3_QUEUE_ACCEP
         await queue.enqueueRun(id, "manual"); const run = await claim(id);
         if (mode === "scope") await pool.query("UPDATE target SET scope_version=scope_version+1 WHERE id=$1", [id]);
         if (mode === "archive") await pool.query("UPDATE target SET archived_at=clock_timestamp() WHERE id=$1", [id]);
-        if (mode === "baseline") await pool.query("UPDATE target SET baseline_run_id=$2 WHERE id=$1", [id, baseline]);
+        if (mode === "baseline") { assert.ok(baseline); await pool.query("UPDATE target SET baseline_run_id=NULL WHERE id=$1", [id]); }
         await queue.finish(run, await result()); assert.equal((await row(run.id)).execution_status, "cancelled"); assert.equal((await row(run.id)).adoption_status, "stale");
         assert.equal((await pool.query("SELECT count(*)::int AS n FROM crawl_run_source WHERE run_id=$1", [run.id])).rows[0].n, 0);
       }
