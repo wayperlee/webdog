@@ -1,0 +1,3 @@
+
+> webdog-ai@0.1.0 typecheck
+> tsc --noEmit --incremental false

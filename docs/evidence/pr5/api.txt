@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "Read/write ownership, strict payloads, unsafe scope and invalid path rules verified through HTTP",
+    "Literal path filters, search and pagination match list counts; filtering leaves all 123 inventory facts unchanged",
+    "Quarantine and full 123-URL Candidate detail ready for browser adoption acceptance",
+    "Archive prohibits manual scans, preserves history and restores paused monitor"
+  ],
+  "fixture": true,
+  "websiteId": "web_muqj8k43CGt-HrF7",
+  "targetId": "tgt_muqj8k44fOrjlIH_",
+  "candidateId": "29c90c4d-9a97-441d-9935-1c9c6ca44356",
+  "urlCount": 123,
+  "events": 121
+}

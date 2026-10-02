@@ -3,9 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { normalizeDomain } from "@/lib/domain";
-import {
-  parseWebsiteUrlInput,
-} from "@/lib/website-url-input";
+import { parseWebsiteUrlInput } from "@/lib/website-url-input";
 
 export function AddWebsiteDialog() {
   const router = useRouter();
@@ -38,31 +36,45 @@ export function AddWebsiteDialog() {
     setLoading(true);
     const body = { domain: normalized };
 
-    const res = await fetch("/api/websites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    setLoading(false);
-    if (!res.ok) {
-      const bodyJson = await res.json().catch(() => ({}));
-      setError(bodyJson.error ?? "Something went wrong");
-      return;
+    try {
+      const res = await fetch("/api/websites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Could not add website");
+      setOpen(false);
+      reset();
+      router.push(`/dashboard/websites/${data.website.id}`);
+      router.refresh();
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Could not add website. Please try again.",
+      );
+    } finally {
+      setLoading(false);
     }
-    const { website } = await res.json();
-    setOpen(false);
-    reset();
-    router.push(`/dashboard/websites/${website.id}`);
-    router.refresh();
   }
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className="btn-accent h-8 !py-0">
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="btn-accent h-8 !py-0"
+      >
         <PlusIcon className="size-4" /> Add website
       </button>
       {open && (
-        <div role="dialog" aria-modal="true" aria-label="Add website" className="fixed inset-0 z-50">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Add website"
+          className="fixed inset-0 z-50"
+        >
           <button
             type="button"
             aria-label="Close"
@@ -77,12 +89,18 @@ export function AddWebsiteDialog() {
               onSubmit={onSubmit}
               className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl ring-1 ring-neutral-950/5"
             >
-              <h2 className="text-base font-semibold text-neutral-900">Add a website to watch</h2>
+              <h2 className="text-base font-semibold text-neutral-900">
+                Add a website to watch
+              </h2>
               <p className="mt-1 text-sm text-neutral-600">
-                Add a domain for sitemap monitoring. No provider API key is required.
+                Add a domain for sitemap monitoring. No provider API key is
+                required.
               </p>
               <div className="mt-6">
-                <label htmlFor="w-domain" className="block text-sm font-medium text-neutral-900">
+                <label
+                  htmlFor="w-domain"
+                  className="block text-sm font-medium text-neutral-900"
+                >
                   Domain
                 </label>
                 <div className="relative mt-1.5">
@@ -106,7 +124,8 @@ export function AddWebsiteDialog() {
                     onPaste={(e) => {
                       const raw = e.clipboardData.getData("text/plain");
                       const parsed = parseWebsiteUrlInput(raw);
-                      if (parsed.domainHost === raw.trim() && !parsed.pagePath) return;
+                      if (parsed.domainHost === raw.trim() && !parsed.pagePath)
+                        return;
                       e.preventDefault();
                       const el = e.currentTarget;
                       const start = el.selectionStart ?? 0;
@@ -121,7 +140,8 @@ export function AddWebsiteDialog() {
                   />
                 </div>
                 <p className="mt-2 text-xs text-neutral-500">
-                  Paste a domain or URL. Only the domain is saved; page content monitoring is unavailable.
+                  Paste a domain or URL. Only the domain is saved; page content
+                  monitoring is unavailable.
                 </p>
               </div>
               {error && (
@@ -140,7 +160,11 @@ export function AddWebsiteDialog() {
                 >
                   Cancel
                 </button>
-                <button type="submit" disabled={loading || !domain.trim()} className="btn-accent">
+                <button
+                  type="submit"
+                  disabled={loading || !domain.trim()}
+                  className="btn-accent"
+                >
                   {loading ? "Saving…" : "Add website"}
                 </button>
               </div>
@@ -154,7 +178,13 @@ export function AddWebsiteDialog() {
 
 function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" {...props}>
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.75"
+      {...props}
+    >
       <path d="M8 3v10M3 8h10" strokeLinecap="round" />
     </svg>
   );

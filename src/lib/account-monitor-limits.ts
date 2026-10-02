@@ -1,4 +1,4 @@
-import { and, eq, ne, sql } from "drizzle-orm";
+import { and, eq, ne, sql, isNull } from "drizzle-orm";
 import { db } from "./db";
 import * as schema from "./db/schema";
 import { maxAlertsPerAccount } from "./server-managed-config";
@@ -11,11 +11,13 @@ async function countEnabledMonitors(
     ? and(
         eq(schema.website.userId, ownerUserId),
         eq(schema.target.enabled, true),
+        isNull(schema.target.archivedAt),
         ne(schema.target.id, excludingTargetId),
       )
     : and(
         eq(schema.website.userId, ownerUserId),
         eq(schema.target.enabled, true),
+        isNull(schema.target.archivedAt),
       );
 
   const [row] = await db

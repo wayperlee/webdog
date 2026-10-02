@@ -1,0 +1,24 @@
+{
+  "tool": "ego-browser",
+  "taskSpaceId": 38,
+  "origin": "http://localhost:31072",
+  "fixture": true,
+  "scope": "dedicated PR5 QA account only",
+  "checks": [
+    "URL inventory pagination: 1-50 and 51-100 of 123",
+    "Changes pagination: 1-50 and 51-100 of 121; removed filter empty state",
+    "Candidate URL pagination reaches 101-123 of 123",
+    "Adopt first observation produces 123 pending_removed and zero Removed events",
+    "Invalid prefix error; valid Include/Exclude yields 120 rows; interval changes to 12h",
+    "Search empty state and Clear restores pagination",
+    "Scope switch displays new baseline requirement; old scope has 50 rows on first page",
+    "Archive hides default list row; Show archived reveals row; archived Run now disabled",
+    "Restore, resume, pause; paused manual Run queues",
+    "Complete baseline appears through polling without reload: 120 URLs and zero events",
+    "Final failure allows new manual Run; retry scheduled visible; duplicate submit shows existing availableAt",
+    "Same Run completes attempt 2 and inventory updated state appears automatically"
+  ],
+  "mobile": {"viewport":390,"documentWidth":390,"firstPageRows":50},
+  "userSiteReadOnly": {"domain":"supermaker.ai","scopeVersion":1,"currentUrls":1735},
+  "notes": "XML and errors are controlled fixtures; QA retry time was advanced for acceptance. User-owned site settings were not changed."
+}
