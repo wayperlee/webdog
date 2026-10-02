@@ -27,10 +27,15 @@ async function applyObservation(client: PoolClient, target: InventoryTarget, run
     FROM jsonb_to_recordset($3::jsonb) AS v(url text,hash text)
     LEFT JOIN site_url u ON u.website_id=$1 AND u.scope_version=$2 AND u.normalized_url_hash=v.hash
     WHERE u.normalized_url_hash IS NULL OR u.status='removed' ON CONFLICT DO NOTHING`, values);
+  // The caller's target lock serializes all observations for this website/scope.
+  // Join-update existing rows rather than probing the unique index once per URL via UPSERT.
+  if (!baseline) await client.query(`UPDATE site_url u SET status='active',last_seen_at=$5,
+    first_missing_run_id=NULL,first_missing_observed_at=NULL,last_missing_run_id=NULL,missing_confirmations=0,removed_at=NULL
+    FROM jsonb_to_recordset($3::jsonb) AS v(url text,hash text)
+    WHERE u.website_id=$1 AND u.scope_version=$2 AND u.normalized_url_hash=v.hash AND $4::text IS NOT NULL`, values);
   await client.query(`INSERT INTO site_url(website_id,scope_version,normalized_url_hash,url,first_seen_at,last_seen_at)
-    SELECT $1,$2,v.hash,v.url,$5,$5 FROM jsonb_to_recordset($3::jsonb) AS v(url text,hash text) WHERE $4::text IS NOT NULL
-    ON CONFLICT(website_id,scope_version,normalized_url_hash) DO UPDATE SET status='active',last_seen_at=excluded.last_seen_at,
-      first_missing_run_id=NULL,first_missing_observed_at=NULL,last_missing_run_id=NULL,missing_confirmations=0,removed_at=NULL`, values);
+    SELECT $1,$2,v.hash,v.url,$5,$5 FROM jsonb_to_recordset($3::jsonb) AS v(url text,hash text)
+    WHERE $4::text IS NOT NULL AND NOT EXISTS(SELECT 1 FROM site_url u WHERE u.website_id=$1 AND u.scope_version=$2 AND u.normalized_url_hash=v.hash)`, values);
   if (baseline) return;
   // The second observation is a different Run and >= 1 hour from the first missing observation.
   await client.query(`WITH removed AS (

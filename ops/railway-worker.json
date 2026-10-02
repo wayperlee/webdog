@@ -1,0 +1,8 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": { "buildCommand": "npm run build" },
+  "deploy": {
+    "startCommand": "node --import tsx scripts/worker.ts",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}

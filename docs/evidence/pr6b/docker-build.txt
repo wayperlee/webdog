@@ -1,0 +1,154 @@
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 640B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 transferring context: 174B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#3 DONE 4.2s
+
+#4 [build 1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 79.47kB 0.1s done
+#5 DONE 0.2s
+
+#6 [build 2/6] WORKDIR /app
+#6 CACHED
+
+#7 [build 3/6] COPY package.json package-lock.json ./
+#7 CACHED
+
+#8 [build 4/6] RUN npm ci
+#8 CACHED
+
+#9 [build 5/6] COPY . .
+#9 DONE 0.2s
+
+#10 [build 6/6] RUN npm run build && npm prune --omit=dev
+#10 0.410
+#10 0.410 > webdog-ai@0.1.0 build
+#10 0.410 > next build
+#10 0.410
+#10 1.542    ▲ Next.js 15.5.18
+#10 1.542
+#10 1.636    Creating an optimized production build ...
+#10 16.86  ✓ Compiled successfully in 12.6s
+#10 16.86    Linting and checking validity of types ...
+#10 22.68
+#10 22.68 ./src/components/animated-notif-list.tsx
+#10 22.68 71:13  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+#10 22.68
+#10 22.68 ./src/components/monitor-card.tsx
+#10 22.68 524:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+#10 22.68
+#10 22.68 ./src/components/public-monitor-card.tsx
+#10 22.68 106:16  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+#10 22.68
+#10 22.68 ./src/components/system-services-settings.tsx
+#10 22.68 18:20  Warning: '_key' is defined but never used.  @typescript-eslint/no-unused-vars
+#10 22.68
+#10 22.68 ./src/legacy/upstream-landing.tsx
+#10 22.68 96:14  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+#10 22.68 281:22  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+#10 22.68 376:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-img-element').
+#10 22.68
+#10 22.68 ./src/lib/context-client.ts
+#10 22.68 8:10  Warning: 'normalizeDomain' is defined but never used.  @typescript-eslint/no-unused-vars
+#10 22.68
+#10 22.68 info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+#10 25.46    Collecting page data ...
+#10 27.34    Generating static pages (0/25) ...
+#10 28.11    Generating static pages (6/25)
+#10 28.11    Generating static pages (12/25)
+#10 28.11    Generating static pages (18/25)
+#10 28.15  ✓ Generating static pages (25/25)
+#10 28.79    Finalizing page optimization ...
+#10 28.79    Collecting build traces ...
+#10 42.96
+#10 42.96 Route (app)                                                Size  First Load JS
+#10 42.96 ┌ ƒ /                                                     165 B         106 kB
+#10 42.96 ├ ○ /_not-found                                           996 B         103 kB
+#10 42.96 ├ ƒ /api/account/active                                   218 B         103 kB
+#10 42.96 ├ ƒ /api/account/invites                                  218 B         103 kB
+#10 42.96 ├ ƒ /api/account/invites/[id]                             218 B         103 kB
+#10 42.96 ├ ƒ /api/account/invites/redeem                           218 B         103 kB
+#10 42.96 ├ ƒ /api/account/members                                  218 B         103 kB
+#10 42.96 ├ ƒ /api/account/members/[memberUserId]                   218 B         103 kB
+#10 42.96 ├ ƒ /api/alerts                                           218 B         103 kB
+#10 42.96 ├ ƒ /api/alerts/[id]                                      218 B         103 kB
+#10 42.96 ├ ƒ /api/alerts/mark-all-read                             218 B         103 kB
+#10 42.96 ├ ƒ /api/auth/[...all]                                    218 B         103 kB
+#10 42.96 ├ ƒ /api/cron/run                                         218 B         103 kB
+#10 42.96 ├ ƒ /api/health                                           218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]                                     218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/candidates                          218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/candidates/[candidateId]/approve    218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/candidates/[candidateId]/urls       218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/events                              218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/runs                                218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/scope                               218 B         103 kB
+#10 42.96 ├ ƒ /api/targets/[id]/urls                                218 B         103 kB
+#10 42.96 ├ ƒ /api/user/ai-models                                   218 B         103 kB
+#10 42.96 ├ ƒ /api/user/context-intro                               218 B         103 kB
+#10 42.96 ├ ƒ /api/user/notification-destinations                   218 B         103 kB
+#10 42.96 ├ ƒ /api/user/notification-destinations/[id]              218 B         103 kB
+#10 42.96 ├ ƒ /api/user/notification-settings                       218 B         103 kB
+#10 42.96 ├ ƒ /api/user/notification-settings/test                  218 B         103 kB
+#10 42.96 ├ ƒ /api/websites                                         218 B         103 kB
+#10 42.96 ├ ƒ /api/websites/[id]                                    218 B         103 kB
+#10 42.96 ├ ƒ /api/websites/[id]/share                              218 B         103 kB
+#10 42.96 ├ ƒ /api/websites/[id]/targets                            218 B         103 kB
+#10 42.96 ├ ƒ /dashboard                                          3.76 kB         110 kB
+#10 42.96 ├ ƒ /dashboard/alerts                                     218 B         103 kB
+#10 42.96 ├ ƒ /dashboard/settings                                   218 B         103 kB
+#10 42.96 ├ ƒ /dashboard/websites/[id]                            6.74 kB         113 kB
+#10 42.96 ├ ○ /icon.svg                                               0 B            0 B
+#10 42.96 ├ ƒ /invite/[token]                                     1.22 kB         107 kB
+#10 42.96 ├ ƒ /onboarding/context-dev                               218 B         103 kB
+#10 42.96 ├ ƒ /share/[token]                                      9.78 kB         116 kB
+#10 42.96 ├ ƒ /sign-in                                             1.4 kB         117 kB
+#10 42.96 └ ƒ /sign-up                                            1.45 kB         117 kB
+#10 42.96 + First Load JS shared by all                            102 kB
+#10 42.96   ├ chunks/1255-b28ea36bf0cdbd65.js                     46.2 kB
+#10 42.96   ├ chunks/4bd1b696-f785427dddbba9fb.js                 54.2 kB
+#10 42.96   └ other shared chunks (total)                         1.93 kB
+#10 42.96
+#10 42.96
+#10 42.96 ƒ Middleware                                            32.7 kB
+#10 42.96
+#10 42.96 ○  (Static)   prerendered as static content
+#10 42.96 ƒ  (Dynamic)  server-rendered on demand
+#10 42.96
+#10 46.10
+#10 46.10 up to date, audited 96 packages in 3s
+#10 46.10
+#10 46.10 17 packages are looking for funding
+#10 46.10   run `npm fund` for details
+#10 46.19
+#10 46.19 10 vulnerabilities (5 low, 4 high, 1 critical)
+#10 46.19
+#10 46.19 To address all issues, run:
+#10 46.19   npm audit fix
+#10 46.19
+#10 46.19 Run `npm audit` for details.
+#10 DONE 46.3s
+
+#6 [build 2/6] WORKDIR /app
+#6 CACHED
+
+#11 [runtime 3/4] COPY --from=build --chown=node:node /app /app
+#11 DONE 2.7s
+
+#12 [runtime 4/4] COPY --chmod=755 ops/runtime-entrypoint.sh /usr/local/bin/radar-entrypoint
+#12 DONE 0.0s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 2.0s done
+#13 writing image sha256:dfdc75e766be579510cfba719caaada7fdee373f8e59ac8287d8d1fef4751110 done
+#13 naming to docker.io/library/sitemap-radar:pr6b done
+#13 DONE 2.0s

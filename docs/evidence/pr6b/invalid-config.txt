@@ -1,0 +1,1 @@
+RUNTIME_CONFIG_INVALID: database, auth secret, canonical origin or resolver

@@ -1,0 +1,55 @@
+x-app: &app
+  image: ${RADAR_IMAGE:-sitemap-radar:local}
+  build: .
+  env_file: ${RADAR_ENV_FILE:?Set RADAR_ENV_FILE to an absolute private env file}
+  init: true
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  migrate:
+    <<: *app
+    command: ["node", "node_modules/drizzle-kit/bin.cjs", "migrate"]
+    restart: "no"
+  web:
+    <<: *app
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DB_POOL_MAX: ${RADAR_WEB_POOL_MAX:-10}
+      DB_APPLICATION_NAME: sitemap-radar-web
+    ports:
+      - "${RADAR_BIND_ADDRESS:-127.0.0.1}:${RADAR_WEB_PORT:-3000}:3000"
+    mem_limit: 1g
+    stop_grace_period: 30s
+    healthcheck:
+      test: ["CMD", "node", "scripts/web-health.mjs"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+  worker:
+    <<: *app
+    command: ["node", "--import", "tsx", "scripts/worker.ts"]
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      DB_POOL_MAX: ${RADAR_WORKER_POOL_MAX:-2}
+      DB_APPLICATION_NAME: sitemap-radar-worker
+      WORKER_HEALTH_FILE: /tmp/sitemap-worker-health.json
+      WORKER_SHUTDOWN_TIMEOUT_MS: "15000"
+    mem_limit: 1g
+    stop_grace_period: 25s
+    healthcheck:
+      test: ["CMD", "node", "--import", "tsx", "scripts/worker-health.ts"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

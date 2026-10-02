@@ -1,0 +1,43 @@
+{
+  "observedAt": "2026-10-02T07:12:03.527Z",
+  "isolatedDatabase": true,
+  "productionTouched": false,
+  "services": {
+    "nonRoot": true,
+    "separateContainers": true,
+    "migrateBeforeStart": true,
+    "webReady": true,
+    "workerReady": true,
+    "restartPolicy": "unless-stopped"
+  },
+  "containerCrawler": {
+    "dnsResolver": "cloudflare-doh",
+    "urls": 1735,
+    "authenticatedApi": true,
+    "nativeTransport": true
+  },
+  "healthFailureDetection": {
+    "missingSchemaReturns503": true,
+    "idleStaleProbeFails": true
+  },
+  "crashRestart": {
+    "actualSigkill": true,
+    "automaticRestart": true,
+    "readyMs": 16167,
+    "workerIdentityChanged": true
+  },
+  "gracefulShutdown": {
+    "stoppedDuringNativeAttempt": true,
+    "exitCode": 0,
+    "stopMs": 623,
+    "persistedSameRun": true,
+    "retryDelayAtLeast5Minutes": true,
+    "resumedDoesNotClaimEarly": true
+  },
+  "sourceDatabaseUnchanged": true,
+  "cleanup": {
+    "containersRemoved": true,
+    "isolatedDatabaseDropped": true,
+    "privateEnvDeleted": true
+  }
+}
