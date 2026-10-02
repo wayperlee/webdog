@@ -4,6 +4,11 @@ export function p0RouteDecision(path: string, method: string): { status: number;
   if (!path.startsWith("/api/")) return null;
   if (path.startsWith("/api/auth/") || path === "/api/health") return null;
   if (path === "/api/account/active") return null; // Existing ownership selection, not invitations.
+  if (path === "/api/competitor-groups") return ["GET", "HEAD", "POST"].includes(method) ? null : { status: 405, allow: "GET, HEAD, POST" };
+  if (path === "/api/competitor-groups/overview") return ["GET", "HEAD"].includes(method) ? null : { status: 405, allow: "GET, HEAD" };
+  if (path === "/api/competitor-groups/assign-websites") return method === "POST" ? null : { status: 405, allow: "POST" };
+  if (/^\/api\/competitor-groups\/[^/]+$/.test(path)) return ["GET", "HEAD", "PATCH", "DELETE"].includes(method) ? null : { status: 405, allow: "GET, HEAD, PATCH, DELETE" };
+  if (/^\/api\/competitor-groups\/[^/]+\/(websites|events)$/.test(path)) return ["GET", "HEAD"].includes(method) ? null : { status: 405, allow: "GET, HEAD" };
   if (path === "/api/websites") {
     return ["GET", "HEAD", "POST"].includes(method) ? null : { status: 405, allow: "GET, HEAD, POST" };
   }

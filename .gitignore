@@ -55,3 +55,7 @@ Thumbs.db
 .wrangler
 .dev.vars*
 !.dev.vars.example
+supabase/.temp/
+
+# Isolated acceptance builds
+.next-*/
